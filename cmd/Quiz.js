@@ -17,7 +17,11 @@ const CATEGORIES = {
   kpop: 'K-pop',
   films: 'Films et cinéma',
   sciences: 'Sciences',
-  histoire: 'Histoire'
+  histoire: 'Histoire',
+  geographie: 'Géographie',
+  technologie: 'Technologie',
+  litterature: 'Littérature',
+  nature: 'Nature et environnement'
 };
 
 function normalize(value) {
@@ -75,6 +79,10 @@ function categoryFrom(value) {
   if (category === 'film' || category === 'films horreur' || category === 'films dhorreur') return 'horreur';
   if (category === 'cinema' || category === 'cinema films') return 'films';
   if (category === 'science') return 'sciences';
+  if (category === 'geo' || category === 'geographie') return 'geographie';
+  if (category === 'tech' || category === 'technologie') return 'technologie';
+  if (category === 'litterature' || category === 'litterature francaise') return 'litterature';
+  if (category === 'environnement' || category === 'nature environnement') return 'nature';
   return category;
 }
 
@@ -192,7 +200,7 @@ ovlcmd({
   nom_cmd: 'quiz',
   classe: 'Jeux',
   react: '🧠',
-  desc: 'Quiz anime, culture générale, football, musique, K-pop, cinéma, sciences et histoire.',
+  desc: 'Quiz anime, culture générale, football, musique, K-pop, cinéma, sciences, histoire, géographie, technologie, littérature et nature.',
   alias: ['quizz']
 }, runQuizCommand);
 

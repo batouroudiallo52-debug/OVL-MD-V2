@@ -1318,5 +1318,357 @@
       "Le saxophone"
     ],
     "answer": 1
+  },
+  {
+    "category": "geographie",
+    "question": "Quelle est la capitale du Canada ?",
+    "options": [
+      "Toronto",
+      "Vancouver",
+      "Ottawa",
+      "Montréal"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "geographie",
+    "question": "Quel est le plus long fleuve d’Afrique ?",
+    "options": [
+      "Le Niger",
+      "Le Nil",
+      "Le Congo",
+      "Le Zambèze"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "geographie",
+    "question": "Dans quel pays se trouve le mont Fuji ?",
+    "options": [
+      "La Chine",
+      "La Corée du Sud",
+      "Le Japon",
+      "La Thaïlande"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "geographie",
+    "question": "Quel désert couvre une grande partie du nord de l’Afrique ?",
+    "options": [
+      "Le Kalahari",
+      "Le Sahara",
+      "Le Namib",
+      "Le Gobi"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "geographie",
+    "question": "Quelle ville est surnommée la ville aux sept collines ?",
+    "options": [
+      "Rome",
+      "Athènes",
+      "Lisbonne",
+      "Prague"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "geographie",
+    "question": "Quel océan borde la côte ouest de l’Afrique ?",
+    "options": [
+      "L’océan Indien",
+      "L’océan Atlantique",
+      "L’océan Arctique",
+      "L’océan Pacifique"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "geographie",
+    "question": "Quel pays a la forme approximative d’une botte ?",
+    "options": [
+      "L’Espagne",
+      "La Grèce",
+      "L’Italie",
+      "La Croatie"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "geographie",
+    "question": "Quelle est la capitale du Sénégal ?",
+    "options": [
+      "Bamako",
+      "Dakar",
+      "Conakry",
+      "Abidjan"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "technologie",
+    "question": "Que signifie HTML ?",
+    "options": [
+      "HyperText Markup Language",
+      "HighText Machine Language",
+      "Home Tool Markup Link",
+      "Hyperlink Text Management Language"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "technologie",
+    "question": "Quel langage est principalement utilisé pour styliser les pages Web ?",
+    "options": [
+      "CSS",
+      "SQL",
+      "Bash",
+      "C"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "technologie",
+    "question": "Que signifie CPU ?",
+    "options": [
+      "Central Processing Unit",
+      "Computer Power Utility",
+      "Core Program User",
+      "Central Program Upload"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "technologie",
+    "question": "Quel système d’exploitation est développé par Google pour les téléphones mobiles ?",
+    "options": [
+      "Android",
+      "Ubuntu",
+      "FreeBSD",
+      "Solaris"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "technologie",
+    "question": "Quelle structure de données fonctionne selon le principe dernier entré, premier sorti ?",
+    "options": [
+      "Une file",
+      "Une pile",
+      "Un graphe",
+      "Une table de hachage"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "technologie",
+    "question": "Quel protocole est principalement utilisé pour consulter des pages Web de manière sécurisée ?",
+    "options": [
+      "FTP",
+      "HTTP",
+      "HTTPS",
+      "SMTP"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "technologie",
+    "question": "Quel format est couramment utilisé pour échanger des données structurées entre applications ?",
+    "options": [
+      "JPEG",
+      "JSON",
+      "MP3",
+      "PNG"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "technologie",
+    "question": "Dans Git, quelle commande crée une copie locale d’un dépôt distant ?",
+    "options": [
+      "git clone",
+      "git merge",
+      "git stash",
+      "git blame"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "litterature",
+    "question": "Qui a écrit « Le Petit Prince » ?",
+    "options": [
+      "Jules Verne",
+      "Antoine de Saint-Exupéry",
+      "Albert Camus",
+      "Marcel Proust"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "litterature",
+    "question": "Quel écrivain a créé le personnage de Sherlock Holmes ?",
+    "options": [
+      "Arthur Conan Doyle",
+      "Agatha Christie",
+      "Victor Hugo",
+      "H. G. Wells"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "litterature",
+    "question": "Dans quelle œuvre trouve-t-on le personnage de Jean Valjean ?",
+    "options": [
+      "Germinal",
+      "Les Misérables",
+      "Le Comte de Monte-Cristo",
+      "L’Étranger"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "litterature",
+    "question": "Qui a écrit « Roméo et Juliette » ?",
+    "options": [
+      "William Shakespeare",
+      "Dante Alighieri",
+      "Miguel de Cervantès",
+      "Goethe"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "litterature",
+    "question": "Quel genre littéraire raconte généralement des événements imaginaires en prose ?",
+    "options": [
+      "Le roman",
+      "L’essai",
+      "La biographie",
+      "Le dictionnaire"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "litterature",
+    "question": "Quel auteur ivoirien a écrit « Allah n’est pas obligé » ?",
+    "options": [
+      "Ahmadou Kourouma",
+      "Camara Laye",
+      "Cheikh Hamidou Kane",
+      "Ousmane Sembène"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "litterature",
+    "question": "Quel courant littéraire est associé à André Breton ?",
+    "options": [
+      "Le classicisme",
+      "Le surréalisme",
+      "Le naturalisme",
+      "Le romantisme"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "litterature",
+    "question": "Comment appelle-t-on un texte organisé en vers ?",
+    "options": [
+      "Une poésie",
+      "Une notice",
+      "Une chronique",
+      "Une préface"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "nature",
+    "question": "Quel gaz les plantes absorbent-elles principalement pour la photosynthèse ?",
+    "options": [
+      "L’oxygène",
+      "Le dioxyde de carbone",
+      "L’hélium",
+      "L’azote"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "nature",
+    "question": "Quel est le plus grand animal vivant connu ?",
+    "options": [
+      "L’éléphant d’Afrique",
+      "La baleine bleue",
+      "Le requin-baleine",
+      "La girafe"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "nature",
+    "question": "Quel organe permet principalement aux poissons de respirer dans l’eau ?",
+    "options": [
+      "Les poumons",
+      "Les branchies",
+      "Les nageoires",
+      "Les écailles"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "nature",
+    "question": "Comment appelle-t-on un animal qui se nourrit uniquement de végétaux ?",
+    "options": [
+      "Carnivore",
+      "Omnivore",
+      "Herbivore",
+      "Insectivore"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "nature",
+    "question": "Quel phénomène naturel mesure-t-on avec l’échelle de Richter ?",
+    "options": [
+      "Les séismes",
+      "Les cyclones",
+      "Les marées",
+      "Les éruptions solaires"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "nature",
+    "question": "Quelle partie de la plante absorbe principalement l’eau et les sels minéraux ?",
+    "options": [
+      "La fleur",
+      "La feuille",
+      "La racine",
+      "Le fruit"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "nature",
+    "question": "Quelle énergie est produite à partir de la lumière du Soleil ?",
+    "options": [
+      "L’énergie solaire",
+      "L’énergie marémotrice",
+      "L’énergie géothermique",
+      "L’énergie hydraulique"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "nature",
+    "question": "Comment s’appelle la transformation d’une chenille en papillon ?",
+    "options": [
+      "La germination",
+      "La métamorphose",
+      "La fermentation",
+      "La pollinisation"
+    ],
+    "answer": 2
   }
 ]
