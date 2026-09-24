@@ -18,7 +18,14 @@ const CATEGORY_IMAGES = {
   foot: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
   horreur: 'https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=1200&q=80',
   kpop: 'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=1200&q=80',
-  musique: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1200&q=80'
+  musique: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1200&q=80',
+  films: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1200&q=80',
+  geographie: 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1200&q=80',
+  histoire: 'https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=1200&q=80',
+  litterature: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1200&q=80',
+  nature: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80',
+  sciences: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80',
+  technologie: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80'
 };
 
 // Catégories disponibles pour les parties de quiz.
@@ -28,7 +35,14 @@ const CATEGORIES = {
   foot: 'Football',
   horreur: 'Films d’horreur',
   kpop: 'K-pop',
-  musique: 'Musique'
+  musique: 'Musique',
+  films: 'Films',
+  geographie: 'Géographie',
+  histoire: 'Histoire',
+  litterature: 'Littérature',
+  nature: 'Nature',
+  sciences: 'Sciences',
+  technologie: 'Technologie'
 };
 
 function normalize(value) {
@@ -85,8 +99,15 @@ function getRawText(context) {
 function categoryFrom(value) {
   const category = normalize(value);
   if (category === 'culture generale' || category === 'general' || category === 'culture') return 'culture';
-  if (category === 'film' || category === 'films horreur' || category === 'films dhorreur' || category === 'horreur') return 'horreur';
+  if (category === 'films horreur' || category === 'films dhorreur' || category === 'horreur') return 'horreur';
   if (category === 'football' || category === 'foot') return 'foot';
+  if (category === 'film' || category === 'films') return 'films';
+  if (category === 'géographie' || category === 'geographie' || category === 'geography') return 'geographie';
+  if (category === 'histoire' || category === 'history') return 'histoire';
+  if (category === 'littérature' || category === 'litterature' || category === 'literature') return 'litterature';
+  if (category === 'nature') return 'nature';
+  if (category === 'sciences' || category === 'science') return 'sciences';
+  if (category === 'technologie' || category === 'technology' || category === 'tech') return 'technologie';
   if (category === 'k-pop' || category === 'kpop') return 'kpop';
   if (category === 'musique' || category === 'music') return 'musique';
   return category;
@@ -333,7 +354,7 @@ ovlcmd({
   nom_cmd: 'quiz',
   classe: 'Jeux',
   react: '🧠',
-  desc: 'Quiz anime, culture générale, football, films d’horreur, K-pop et musique, en 10, 30, 60 ou 100 questions.',
+  desc: 'Quiz avec textes ou images, 13 catégories et 10, 30, 60 ou 100 questions.',
   alias: ['quizz']
 }, runQuizCommand);
 
