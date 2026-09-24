@@ -39,18 +39,30 @@ function loadQuestions() {
 
 function getArgs(context) {
   if (Array.isArray(context?.arg)) return context.arg.map(String);
-  if (typeof context?.arg === 'string') {
-    return context.arg.trim().split(/\s+/).filter(Boolean);
-  }
+  if (typeof context?.arg === 'string') return context.arg.trim().split(/\s+/).filter(Boolean);
   return [];
 }
 
 function getSender(context) {
-  return context?.auteur_Message || context?.sender || 'joueur';
+  return context?.auteur_Message || context?.sender || context?.participant || 'joueur';
 }
 
 function getChatId(context, fallback) {
-  return context?.chatId || context?.jid || fallback;
+  return context?.chatId || context?.jid || context?.ms?.key?.remoteJid || fallback;
+}
+
+function getRawText(context) {
+  const candidates = [
+    context?.body,
+    context?.text,
+    context?.messageText,
+    context?.content,
+    context?.ms?.message?.conversation,
+    context?.ms?.message?.extendedTextMessage?.text,
+    context?.ms?.message?.imageMessage?.caption,
+    context?.ms?.message?.videoMessage?.caption
+  ];
+  return candidates.find((value) => typeof value === 'string')?.trim() || '';
 }
 
 function categoryFrom(value) {
@@ -70,7 +82,7 @@ function formatQuestion(game) {
   const options = game.question.options
     .map((option, index) => `   *${index + 1}.* ${option}`)
     .join('\n');
-  return `🧠 *QUIZ ${CATEGORIES[game.category].toUpperCase()}*\n\n${game.question.question}\n\n${options}\n\nRéponds avec *.quiz 1*, *.quiz 2*, *.quiz 3* ou *.quiz 4*.\n⏱️ Temps limite : 90 secondes`;
+  return `🧠 *QUIZ ${CATEGORIES[game.category].toUpperCase()}*\n\n${game.question.question}\n\n${options}\n\nRéponds simplement avec *1*, *2*, *3* ou *4*.\n⏱️ Temps limite : 90 secondes`;
 }
 
 function getScore(chatId, player) {
@@ -84,19 +96,14 @@ function startQuiz(chatId, player, category, sock) {
   if (!questions.length) throw new Error(`Aucune question disponible pour ${category}.`);
 
   const current = questions[Math.floor(Math.random() * questions.length)];
-  const game = {
-    category,
-    question: current,
-    player,
-    expiresAt: Date.now() + 90_000
-  };
+  const game = { category, question: current, player, expiresAt: Date.now() + 90_000 };
   activeQuizzes.set(chatId, game);
 
   const timeout = setTimeout(() => {
     if (activeQuizzes.get(chatId) === game) {
       activeQuizzes.delete(chatId);
       sock.sendMessage(chatId, {
-        text: `⏱️ Temps écoulé ! La bonne réponse était *${current.answer}*.\n\nLance *.quiz ${category}* pour une nouvelle question.`
+        text: `⏱️ Temps écoulé ! La bonne réponse était *${current.answer}*.\n\nLance *.quiz ${category}* pour recommencer.`
       }).catch(() => {});
     }
   }, 90_000);
@@ -104,69 +111,64 @@ function startQuiz(chatId, player, category, sock) {
   return game;
 }
 
-ovlcmd({
-  nom_cmd: 'quiz',
-  classe: 'Jeux',
-  react: '🧠',
-  desc: 'Quiz anime, culture générale, football, musique et films d’horreur.',
-  alias: ['quizz']
-}, async (jid, sock, context = {}) => {
+async function answerQuiz(chatId, sock, player, answer) {
+  const active = activeQuizzes.get(chatId);
+  if (!active || Date.now() >= active.expiresAt) return false;
+
+  const score = getScore(chatId, player);
+  score.attempts += 1;
+  if (Number(answer) !== active.question.answer) {
+    await sock.sendMessage(chatId, {
+      text: `❌ Mauvaise réponse, @${player.split('@')[0]}. Essaie encore avec *1*, *2*, *3* ou *4*.`
+    });
+    return true;
+  }
+
+  score.points += 1;
+  const nextGame = startQuiz(chatId, player, active.category, sock);
+  await sock.sendMessage(chatId, {
+    text: `✅ Bonne réponse, @${player.split('@')[0]} ! +1 point.\n\nScore : *${score.points}*\n\n${formatQuestion(nextGame)}`
+  });
+  return true;
+}
+
+async function showScore(chatId, sock) {
+  const entries = [...scores.entries()]
+    .filter(([key]) => key.startsWith(`${chatId}:`))
+    .map(([, value]) => value)
+    .sort((a, b) => b.points - a.points);
+  const text = entries.length
+    ? entries.map((entry, index) => `${index + 1}. @${entry.player.split('@')[0]} — ${entry.points} point(s)`).join('\n')
+    : 'Aucun score enregistré pour le moment.';
+  return sock.sendMessage(chatId, { text: `🏆 *SCORES QUIZ*\n\n${text}` });
+}
+
+async function runQuizCommand(jid, sock, context = {}) {
   const chatId = getChatId(context, jid);
   const args = getArgs(context);
   const firstArg = normalize(args[0]);
   const player = getSender(context);
 
+  if (/^[1-4]$/.test(firstArg) && activeQuizzes.has(chatId)) {
+    return answerQuiz(chatId, sock, player, firstArg);
+  }
+
   if (!firstArg || ['aide', 'help', 'categories', 'catégories'].includes(firstArg)) {
     return sock.sendMessage(chatId, {
-      text: `🧠 *QUIZ — CATÉGORIES DISPONIBLES*\n\n${formatCategories()}\n\nAprès la question, réponds uniquement avec un chiffre entre *1 et 4*.\n\n*.quiz score* — voir les scores\n*.quiz stop* — arrêter la partie`
+      text: `🧠 *QUIZ — CATÉGORIES DISPONIBLES*\n\n${formatCategories()}\n\nAprès la question, réponds simplement avec *1*, *2*, *3* ou *4*.\n\n*.quiz score* — voir les scores\n*.quiz stop* — arrêter la partie`
     });
   }
 
   if (['stop', 'arret', 'arrêt', 'cancel'].includes(firstArg)) {
-    if (!activeQuizzes.has(chatId)) {
-      return sock.sendMessage(chatId, { text: 'ℹ️ Aucun quiz n’est en cours dans cette discussion.' });
-    }
     activeQuizzes.delete(chatId);
-    return sock.sendMessage(chatId, { text: '🛑 Quiz arrêté. Lance *.quiz anime* ou une autre catégorie pour recommencer.' });
+    return sock.sendMessage(chatId, { text: '🛑 Quiz arrêté.' });
   }
 
-  if (['score', 'scores', 'classement'].includes(firstArg)) {
-    const entries = [...scores.entries()]
-      .filter(([key]) => key.startsWith(`${chatId}:`))
-      .map(([, value]) => value)
-      .sort((a, b) => b.points - a.points);
-    const text = entries.length
-      ? entries.map((entry, index) => `${index + 1}. @${entry.player.split('@')[0]} — ${entry.points} point(s)`).join('\n')
-      : 'Aucun score enregistré pour le moment.';
-    return sock.sendMessage(chatId, { text: `🏆 *SCORES QUIZ*\n\n${text}` });
-  }
-
-  const active = activeQuizzes.get(chatId);
-  if (active && Date.now() < active.expiresAt && /^[1-4]$/.test(firstArg)) {
-    const score = getScore(chatId, player);
-    score.attempts += 1;
-    const answer = Number(firstArg);
-
-    if (answer === active.question.answer) {
-      score.points += 1;
-      activeQuizzes.delete(chatId);
-      return sock.sendMessage(chatId, {
-        text: `✅ Bonne réponse, @${player.split('@')[0]} ! Tu gagnes 1 point.\n\nScore actuel : *${score.points}*\n\nLance *.quiz ${active.category}* pour continuer.`
-      });
-    }
-
-    return sock.sendMessage(chatId, {
-      text: `❌ Mauvaise réponse, @${player.split('@')[0]}. Essaie encore avec *1*, *2*, *3* ou *4*.`
-    });
-  }
-
-  if (active && Date.now() >= active.expiresAt) activeQuizzes.delete(chatId);
+  if (['score', 'scores', 'classement'].includes(firstArg)) return showScore(chatId, sock);
 
   const category = categoryFrom(firstArg);
   if (!CATEGORIES[category]) {
-    return sock.sendMessage(chatId, {
-      text: `❌ Catégorie inconnue.\n\n${formatCategories()}`
-    });
+    return sock.sendMessage(chatId, { text: `❌ Catégorie inconnue.\n\n${formatCategories()}` });
   }
 
   try {
@@ -176,6 +178,28 @@ ovlcmd({
     console.error('[quiz]', error);
     return sock.sendMessage(chatId, { text: '❌ Impossible de charger cette catégorie pour le moment.' });
   }
+}
+
+ovlcmd({
+  nom_cmd: 'quiz',
+  classe: 'Jeux',
+  react: '🧠',
+  desc: 'Quiz anime, culture générale, football, musique et films d’horreur.',
+  alias: ['quizz']
+}, runQuizCommand);
+
+// Réception des réponses seules « 1 », « 2 », « 3 » ou « 4 », sans préfixe.
+ovlcmd({
+  nom_cmd: 'quiz_answer',
+  isfunc: true,
+  react: '🧠',
+  desc: 'Traite les réponses numériques d’une partie de quiz en cours.'
+}, async (jid, sock, context = {}) => {
+  const chatId = getChatId(context, jid);
+  const raw = getRawText(context);
+  const answer = raw.match(/^[1-4]$/)?.[0];
+  if (!answer || !activeQuizzes.has(chatId)) return;
+  await answerQuiz(chatId, sock, getSender(context), answer);
 });
 
-module.exports = { activeQuizzes, scores, loadQuestions, CATEGORIES };
+module.exports = { activeQuizzes, scores, loadQuestions, CATEGORIES, answerQuiz, runQuizCommand };
