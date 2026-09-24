@@ -10,6 +10,17 @@ const scores = new Map();
 const QUESTION_LIMITS = [10, 30, 60, 100];
 const ANSWER_TIMEOUT = 90_000;
 
+// Images thématiques utilisées lorsque la partie est lancée avec l’option « image ».
+// Une question peut aussi fournir sa propre propriété « image » dans le JSON.
+const CATEGORY_IMAGES = {
+  anime: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80',
+  culture: 'https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=80',
+  foot: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
+  horreur: 'https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=1200&q=80',
+  kpop: 'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=1200&q=80',
+  musique: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1200&q=80'
+};
+
 // Catégories disponibles pour les parties de quiz.
 const CATEGORIES = {
   anime: 'Anime',
@@ -98,6 +109,26 @@ function playerLabel(player) {
   return `@${String(player).split('@')[0]}`;
 }
 
+function questionImage(game) {
+  return game.question.image || CATEGORY_IMAGES[game.category];
+}
+
+async function sendQuestion(chatId, sock, game) {
+  const text = formatQuestion(game);
+  if (!game.imageMode) return sock.sendMessage(chatId, { text });
+  try {
+    return await sock.sendMessage(chatId, {
+      image: { url: questionImage(game) },
+      caption: `🖼️ ${text}`
+    });
+  } catch (error) {
+    console.error('[quiz image]', error.message);
+    return sock.sendMessage(chatId, {
+      text: `⚠️ L’image n’a pas pu être chargée. Voici la question sans image :\n\n${text}`
+    });
+  }
+}
+
 function getGlobalScore(chatId, player) {
   const key = `${chatId}:${player}`;
   if (!scores.has(key)) scores.set(key, { player, points: 0, attempts: 0 });
@@ -127,11 +158,12 @@ function chooseQuestion(game) {
   return question;
 }
 
-function createGame(chatId, player, category, total, sock) {
+function createGame(chatId, player, category, total, imageMode, sock) {
   const pool = loadQuestions(category);
   const game = {
     category,
     total,
+    imageMode,
     index: 1,
     pool,
     used: new Set(),
@@ -152,8 +184,15 @@ function parseTotal(args) {
   return requested ? Number(requested) : 10;
 }
 
+function hasImageOption(args) {
+  return args.some((arg) => ['image', 'images', 'img', 'photo', 'photos'].includes(normalize(arg)));
+}
+
 function parseCategory(args) {
-  const candidate = args.find((arg) => !QUESTION_LIMITS.includes(Number(normalize(arg))));
+  const candidate = args.find((arg) => (
+    !QUESTION_LIMITS.includes(Number(normalize(arg))) &&
+    !['image', 'images', 'img', 'photo', 'photos'].includes(normalize(arg))
+  ));
   return categoryFrom(candidate || '');
 }
 
@@ -203,7 +242,8 @@ async function revealRound(chatId, sock, game, reason) {
   game.question = chooseQuestion(game);
   game.resolving = false;
   scheduleRoundTimeout(chatId, sock, game);
-  await sock.sendMessage(chatId, { text: `${result}\n\n${formatQuestion(game)}` });
+  await sock.sendMessage(chatId, { text: result });
+  await sendQuestion(chatId, sock, game);
 }
 
 async function answerQuiz(chatId, sock, player, answer) {
@@ -253,7 +293,7 @@ async function runQuizCommand(jid, sock, context = {}) {
 
   if (!firstArg || ['aide', 'help', 'categories', 'catégories'].includes(firstArg)) {
     return sock.sendMessage(chatId, {
-      text: `🧠 *QUIZ — CATÉGORIES DISPONIBLES*\n\n${formatCategories()}\n\nFormats acceptés : *10*, *30*, *60* ou *100* questions.\nExemple : *.quiz anime 30*\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. La correction et la question suivante sont automatiques.\n\n*.quiz score* — voir les scores\n*.quiz stop* — arrêter la partie`
+      text: `🧠 *QUIZ — CATÉGORIES DISPONIBLES*\n\n${formatCategories()}\n\nFormats acceptés : *10*, *30*, *60* ou *100* questions.\nExemple texte : *.quiz anime 30*\nExemple avec images : *.quiz anime image 30*\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. La correction et la question suivante sont automatiques.\n\n*.quiz score* — voir les scores\n*.quiz stop* — arrêter la partie`
     });
   }
 
@@ -272,13 +312,17 @@ async function runQuizCommand(jid, sock, context = {}) {
 
   const category = parseCategory(args);
   const total = parseTotal(args);
+  const imageMode = hasImageOption(args);
   if (!CATEGORIES[category]) {
     return sock.sendMessage(chatId, { text: `❌ Catégorie inconnue.\n\n${formatCategories()}` });
   }
 
   try {
-    const game = createGame(chatId, player, category, total, sock);
-    return sock.sendMessage(chatId, { text: `🎮 Partie de *${total} questions* lancée dans la catégorie *${CATEGORIES[category]}*.\n\n${formatQuestion(game)}` });
+    const game = createGame(chatId, player, category, total, imageMode, sock);
+    await sock.sendMessage(chatId, {
+      text: `🎮 Partie de *${total} questions* lancée dans la catégorie *${CATEGORIES[category]}*${imageMode ? ' avec images' : ''}.`
+    });
+    return sendQuestion(chatId, sock, game);
   } catch (error) {
     console.error('[quiz]', error);
     return sock.sendMessage(chatId, { text: '❌ Impossible de charger cette catégorie pour le moment.' });
