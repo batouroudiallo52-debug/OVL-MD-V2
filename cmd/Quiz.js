@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
 const { ovlcmd } = require('../lib/ovlcmd');
 
 const QUESTIONS_FILE = path.join(__dirname, '..', 'lib', 'quiz_questions.json');
@@ -9,6 +10,8 @@ const activeQuizzes = new Map();
 const scores = new Map();
 const QUESTION_LIMITS = [10, 30, 60, 100];
 const ANSWER_TIMEOUT = 90_000;
+const IMAGE_SEARCH_TIMEOUT = 8_000;
+const imageSearchCache = new Map();
 
 // Images thématiques utilisées lorsque la partie est lancée avec l’option « image ».
 // Une question peut aussi fournir sa propre propriété « image » dans le JSON.
@@ -51,6 +54,77 @@ function normalize(value) {
     .replace(/[\u0300-\u036f]/g, '')
     .trim()
     .toLowerCase();
+}
+
+function isImageUrl(value) {
+  if (typeof value !== 'string' || !value.trim()) return false;
+  try {
+    const url = new URL(value.trim());
+    return ['http:', 'https:'].includes(url.protocol);
+  } catch {
+    return false;
+  }
+}
+
+function firstImageValue(question) {
+  // Les données peuvent fournir image, imageUrl, image_url ou images[].
+  const candidates = [
+    question?.image,
+    question?.imageUrl,
+    question?.image_url,
+    ...(Array.isArray(question?.images) ? question.images : [])
+  ];
+  return candidates.find(isImageUrl) || null;
+}
+
+function imageSearchQuery(question, category) {
+  // imageQuery permet de demander explicitement un sujet d’image dans le JSON.
+  const explicitQuery = question?.imageQuery || question?.image_query;
+  if (typeof explicitQuery === 'string' && explicitQuery.trim()) return explicitQuery.trim();
+
+  const answer = question?.options?.[Number(question.answer) - 1];
+  return [answer, category].filter(Boolean).join(' ');
+}
+
+async function findQuestionImage(question, category) {
+  const directImage = firstImageValue(question);
+  if (directImage) return directImage;
+
+  const query = imageSearchQuery(question, category);
+  const cacheKey = normalize(query);
+  if (!cacheKey) return CATEGORY_IMAGES[category] || null;
+  if (imageSearchCache.has(cacheKey)) return imageSearchCache.get(cacheKey);
+
+  const request = axios.get('https://commons.wikimedia.org/w/api.php', {
+    timeout: IMAGE_SEARCH_TIMEOUT,
+    params: {
+      action: 'query',
+      generator: 'search',
+      gsrsearch: query,
+      gsrnamespace: 6,
+      gsrlimit: 5,
+      prop: 'imageinfo',
+      iiprop: 'url|mime',
+      iiurlwidth: 1200,
+      format: 'json',
+      origin: '*'
+    },
+    headers: { 'User-Agent': 'OVL-MD-V2/2.1 (quiz image search)' }
+  }).then(({ data }) => {
+    const pages = Object.values(data?.query?.pages || {});
+    const image = pages.find((page) => {
+      const info = page?.imageinfo?.[0];
+      return info && /^image\/(jpeg|png|webp)$/i.test(info.mime || '') && isImageUrl(info.thumburl || info.url);
+    });
+    return image?.imageinfo?.[0]?.thumburl || image?.imageinfo?.[0]?.url || null;
+  }).catch((error) => {
+    console.error('[quiz image search]', query, error.message);
+    return null;
+  });
+
+  imageSearchCache.set(cacheKey, request);
+  const foundImage = await request;
+  return foundImage || CATEGORY_IMAGES[category] || null;
 }
 
 function loadQuestions(category) {
@@ -130,16 +204,14 @@ function playerLabel(player) {
   return `@${String(player).split('@')[0]}`;
 }
 
-function questionImage(game) {
-  return game.question.image || CATEGORY_IMAGES[game.category];
-}
-
 async function sendQuestion(chatId, sock, game) {
   const text = formatQuestion(game);
   if (!game.imageMode) return sock.sendMessage(chatId, { text });
   try {
+    const image = await findQuestionImage(game.question, game.category);
+    if (!image) throw new Error('Aucune image trouvée');
     return await sock.sendMessage(chatId, {
-      image: { url: questionImage(game) },
+      image: { url: image },
       caption: `🖼️ ${text}`
     });
   } catch (error) {
@@ -377,6 +449,8 @@ module.exports = {
   scores,
   loadQuestions,
   CATEGORIES,
+  findQuestionImage,
+  imageSearchQuery,
   answerQuiz,
   runQuizCommand
 };
