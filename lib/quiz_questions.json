@@ -2,337 +2,793 @@
   {
     "category": "anime",
     "question": "Dans Naruto, comment s'appelle le village de Naruto ?",
-    "options": ["Konoha", "Suna", "Kiri", "Iwa"],
+    "options": [
+      "Konoha",
+      "Suna",
+      "Kiri",
+      "Iwa"
+    ],
     "answer": 1
   },
   {
     "category": "anime",
     "question": "Dans One Piece, quel est le rêve de Luffy ?",
-    "options": ["Devenir amiral", "Devenir le Roi des Pirates", "Trouver le village de Laugh Tale", "Vaincre Shanks"],
+    "options": [
+      "Devenir amiral",
+      "Devenir le Roi des Pirates",
+      "Trouver le village de Laugh Tale",
+      "Vaincre Shanks"
+    ],
     "answer": 2
   },
   {
     "category": "anime",
     "question": "Comment s'appelle le frère de Sasuke Uchiha ?",
-    "options": ["Madara", "Obito", "Itachi", "Kakashi"],
+    "options": [
+      "Madara",
+      "Obito",
+      "Itachi",
+      "Kakashi"
+    ],
     "answer": 3
   },
   {
     "category": "anime",
     "question": "Dans Dragon Ball, qui est le meilleur ami de Goku depuis l'enfance ?",
-    "options": ["Vegeta", "Piccolo", "Krillin", "Gohan"],
+    "options": [
+      "Vegeta",
+      "Piccolo",
+      "Krillin",
+      "Gohan"
+    ],
     "answer": 3
   },
   {
     "category": "anime",
     "question": "Dans Demon Slayer, quel est le nom de la sœur de Tanjiro ?",
-    "options": ["Nezuko", "Shinobu", "Mitsuri", "Kanao"],
+    "options": [
+      "Nezuko",
+      "Shinobu",
+      "Mitsuri",
+      "Kanao"
+    ],
     "answer": 1
   },
   {
     "category": "anime",
     "question": "Dans Death Note, qui utilise le carnet au début de l'histoire ?",
-    "options": ["L", "Light Yagami", "Misa Amane", "Ryuk"],
+    "options": [
+      "L",
+      "Light Yagami",
+      "Misa Amane",
+      "Ryuk"
+    ],
     "answer": 2
   },
   {
     "category": "anime",
     "question": "Dans L'Attaque des Titans, quel personnage peut se transformer en Titan colossal ?",
-    "options": ["Armin Arlert", "Eren Yeager", "Levi Ackerman", "Jean Kirstein"],
+    "options": [
+      "Armin Arlert",
+      "Eren Yeager",
+      "Levi Ackerman",
+      "Jean Kirstein"
+    ],
     "answer": 1
   },
   {
     "category": "anime",
     "question": "Dans My Hero Academia, quel est le nom du héros principal ?",
-    "options": ["Katsuki Bakugo", "Shoto Todoroki", "Izuku Midoriya", "Tomura Shigaraki"],
+    "options": [
+      "Katsuki Bakugo",
+      "Shoto Todoroki",
+      "Izuku Midoriya",
+      "Tomura Shigaraki"
+    ],
     "answer": 3
   },
   {
     "category": "culture",
     "question": "Quelle est la capitale de la France ?",
-    "options": ["Lyon", "Paris", "Marseille", "Toulouse"],
+    "options": [
+      "Lyon",
+      "Paris",
+      "Marseille",
+      "Toulouse"
+    ],
     "answer": 2
   },
   {
     "category": "culture",
     "question": "Combien de continents compte-t-on généralement ?",
-    "options": ["5", "6", "7", "8"],
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
     "answer": 3
   },
   {
     "category": "culture",
     "question": "Quelle planète est surnommée la planète rouge ?",
-    "options": ["Mars", "Jupiter", "Vénus", "Mercure"],
+    "options": [
+      "Mars",
+      "Jupiter",
+      "Vénus",
+      "Mercure"
+    ],
     "answer": 1
   },
   {
     "category": "culture",
     "question": "Qui a écrit Les Misérables ?",
-    "options": ["Molière", "Victor Hugo", "Émile Zola", "Jules Verne"],
+    "options": [
+      "Molière",
+      "Victor Hugo",
+      "Émile Zola",
+      "Jules Verne"
+    ],
     "answer": 2
   },
   {
     "category": "culture",
     "question": "Quel est le plus grand océan du monde ?",
-    "options": ["Atlantique", "Indien", "Arctique", "Pacifique"],
+    "options": [
+      "Atlantique",
+      "Indien",
+      "Arctique",
+      "Pacifique"
+    ],
     "answer": 4
   },
   {
     "category": "culture",
     "question": "Quel élément chimique a pour symbole O ?",
-    "options": ["Or", "Osmium", "Oxygène", "Oganesson"],
+    "options": [
+      "Or",
+      "Osmium",
+      "Oxygène",
+      "Oganesson"
+    ],
     "answer": 3
   },
   {
     "category": "culture",
     "question": "En quelle année l'homme a-t-il marché sur la Lune pour la première fois ?",
-    "options": ["1959", "1969", "1979", "1989"],
+    "options": [
+      "1959",
+      "1969",
+      "1979",
+      "1989"
+    ],
     "answer": 2
   },
   {
     "category": "culture",
     "question": "Combien de côtés possède un hexagone ?",
-    "options": ["5", "6", "7", "8"],
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
     "answer": 2
   },
   {
     "category": "foot",
     "question": "Combien de joueurs une équipe de football aligne-t-elle au début d'un match ?",
-    "options": ["9", "10", "11", "12"],
+    "options": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
     "answer": 3
   },
   {
     "category": "foot",
     "question": "Quelle équipe a remporté la Coupe du monde 2018 ?",
-    "options": ["Brésil", "Allemagne", "Argentine", "France"],
+    "options": [
+      "Brésil",
+      "Allemagne",
+      "Argentine",
+      "France"
+    ],
     "answer": 4
   },
   {
     "category": "foot",
     "question": "Quel joueur est surnommé La Pulga ?",
-    "options": ["Cristiano Ronaldo", "Lionel Messi", "Neymar", "Kylian Mbappé"],
+    "options": [
+      "Cristiano Ronaldo",
+      "Lionel Messi",
+      "Neymar",
+      "Kylian Mbappé"
+    ],
     "answer": 2
   },
   {
     "category": "foot",
     "question": "Quel pays a remporté la Coupe du monde 2022 ?",
-    "options": ["France", "Brésil", "Argentine", "Espagne"],
+    "options": [
+      "France",
+      "Brésil",
+      "Argentine",
+      "Espagne"
+    ],
     "answer": 3
   },
   {
     "category": "foot",
     "question": "Quel club joue ses matchs à domicile au Camp Nou ?",
-    "options": ["Real Madrid", "FC Barcelone", "Liverpool", "Milan AC"],
+    "options": [
+      "Real Madrid",
+      "FC Barcelone",
+      "Liverpool",
+      "Milan AC"
+    ],
     "answer": 2
   },
   {
     "category": "foot",
     "question": "Quel carton entraîne généralement l'expulsion d'un joueur ?",
-    "options": ["Carton blanc", "Carton vert", "Carton jaune", "Carton rouge"],
+    "options": [
+      "Carton blanc",
+      "Carton vert",
+      "Carton jaune",
+      "Carton rouge"
+    ],
     "answer": 4
   },
   {
     "category": "foot",
     "question": "Quelle nation a remporté la Coupe d'Afrique des nations 2023, jouée en 2024 ?",
-    "options": ["Nigeria", "Sénégal", "Côte d'Ivoire", "Égypte"],
+    "options": [
+      "Nigeria",
+      "Sénégal",
+      "Côte d'Ivoire",
+      "Égypte"
+    ],
     "answer": 3
   },
   {
     "category": "foot",
     "question": "Dans quel pays se trouve le club Manchester United ?",
-    "options": ["Angleterre", "Écosse", "Irlande", "Pays de Galles"],
+    "options": [
+      "Angleterre",
+      "Écosse",
+      "Irlande",
+      "Pays de Galles"
+    ],
     "answer": 1
   },
   {
     "category": "musique",
     "question": "Quel instrument possède généralement 88 touches ?",
-    "options": ["Le piano", "La guitare", "La batterie", "Le violon"],
+    "options": [
+      "Le piano",
+      "La guitare",
+      "La batterie",
+      "Le violon"
+    ],
     "answer": 1
   },
   {
     "category": "musique",
     "question": "Quel chanteur est surnommé le Roi de la Pop ?",
-    "options": ["Elvis Presley", "Michael Jackson", "Prince", "Stevie Wonder"],
+    "options": [
+      "Elvis Presley",
+      "Michael Jackson",
+      "Prince",
+      "Stevie Wonder"
+    ],
     "answer": 2
   },
   {
     "category": "musique",
     "question": "Quel groupe a interprété la chanson Bohemian Rhapsody ?",
-    "options": ["The Beatles", "ABBA", "Queen", "Nirvana"],
+    "options": [
+      "The Beatles",
+      "ABBA",
+      "Queen",
+      "Nirvana"
+    ],
     "answer": 3
   },
   {
     "category": "musique",
     "question": "Combien de cordes possède généralement une guitare classique ?",
-    "options": ["4", "5", "6", "7"],
+    "options": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
     "answer": 3
   },
   {
     "category": "musique",
     "question": "Quel artiste a sorti l'album Thriller ?",
-    "options": ["Michael Jackson", "Drake", "Eminem", "Bruno Mars"],
+    "options": [
+      "Michael Jackson",
+      "Drake",
+      "Eminem",
+      "Bruno Mars"
+    ],
     "answer": 1
   },
   {
     "category": "musique",
     "question": "Quel genre musical est associé à Bob Marley ?",
-    "options": ["Reggae", "Jazz", "Metal", "Opéra"],
+    "options": [
+      "Reggae",
+      "Jazz",
+      "Metal",
+      "Opéra"
+    ],
     "answer": 1
   },
   {
     "category": "musique",
     "question": "Quel groupe britannique est composé notamment de John Lennon et Paul McCartney ?",
-    "options": ["The Rolling Stones", "The Beatles", "Coldplay", "Oasis"],
+    "options": [
+      "The Rolling Stones",
+      "The Beatles",
+      "Coldplay",
+      "Oasis"
+    ],
     "answer": 2
   },
   {
     "category": "musique",
     "question": "Quel terme désigne la vitesse d'un morceau de musique ?",
-    "options": ["Le tempo", "Le timbre", "La portée", "L'accord"],
+    "options": [
+      "Le tempo",
+      "Le timbre",
+      "La portée",
+      "L'accord"
+    ],
     "answer": 1
   },
   {
     "category": "horreur",
     "question": "Dans Halloween, comment s'appelle le tueur portant un masque blanc ?",
-    "options": ["Jason Voorhees", "Freddy Krueger", "Michael Myers", "Ghostface"],
+    "options": [
+      "Jason Voorhees",
+      "Freddy Krueger",
+      "Michael Myers",
+      "Ghostface"
+    ],
     "answer": 3
   },
   {
     "category": "horreur",
     "question": "Dans Les Griffes de la nuit, qui attaque ses victimes dans leurs rêves ?",
-    "options": ["Freddy Krueger", "Pennywise", "Leatherface", "Norman Bates"],
+    "options": [
+      "Freddy Krueger",
+      "Pennywise",
+      "Leatherface",
+      "Norman Bates"
+    ],
     "answer": 1
   },
   {
     "category": "horreur",
     "question": "Quel est le nom du clown de Ça ?",
-    "options": ["Pennywise", "Art", "Jigsaw", "Samara"],
+    "options": [
+      "Pennywise",
+      "Art",
+      "Jigsaw",
+      "Samara"
+    ],
     "answer": 1
   },
   {
     "category": "horreur",
     "question": "Dans Scream, quel nom porte le tueur masqué ?",
-    "options": ["Ghostface", "The Collector", "Pinhead", "Candyman"],
+    "options": [
+      "Ghostface",
+      "The Collector",
+      "Pinhead",
+      "Candyman"
+    ],
     "answer": 1
   },
   {
     "category": "horreur",
     "question": "Quel film met en scène une poupée nommée Annabelle ?",
-    "options": ["The Conjuring", "Sinister", "Insidious", "The Ring"],
+    "options": [
+      "The Conjuring",
+      "Sinister",
+      "Insidious",
+      "The Ring"
+    ],
     "answer": 1
   },
   {
     "category": "horreur",
     "question": "Dans Saw, quel personnage est associé au célèbre jeu du tueur ?",
-    "options": ["Jigsaw", "Hannibal Lecter", "Norman Bates", "Dracula"],
+    "options": [
+      "Jigsaw",
+      "Hannibal Lecter",
+      "Norman Bates",
+      "Dracula"
+    ],
     "answer": 1
   },
   {
     "category": "horreur",
     "question": "Quel film d'horreur se déroule principalement dans l'hôtel Overlook ?",
-    "options": ["Shining", "Psychose", "Alien", "Conjuring 2"],
+    "options": [
+      "Shining",
+      "Psychose",
+      "Alien",
+      "Conjuring 2"
+    ],
     "answer": 1
   },
   {
     "category": "horreur",
     "question": "Dans Ring, quel objet est au centre de la malédiction ?",
-    "options": ["Une cassette vidéo", "Un miroir", "Une photo", "Une radio"],
+    "options": [
+      "Une cassette vidéo",
+      "Un miroir",
+      "Une photo",
+      "Une radio"
+    ],
     "answer": 1
   },
   {
     "category": "kpop",
     "question": "Quel groupe a sorti la chanson Dynamite ?",
-    "options": ["BLACKPINK", "BTS", "EXO", "TWICE"],
+    "options": [
+      "BLACKPINK",
+      "BTS",
+      "EXO",
+      "TWICE"
+    ],
     "answer": 2
   },
   {
     "category": "kpop",
     "question": "Quel groupe féminin a interprété la chanson DDU-DU DDU-DU ?",
-    "options": ["BLACKPINK", "Red Velvet", "IVE", "LE SSERAFIM"],
+    "options": [
+      "BLACKPINK",
+      "Red Velvet",
+      "IVE",
+      "LE SSERAFIM"
+    ],
     "answer": 1
   },
   {
     "category": "kpop",
     "question": "Comment appelle-t-on les fans de BTS ?",
-    "options": ["ONCE", "BLINK", "ARMY", "STAY"],
+    "options": [
+      "ONCE",
+      "BLINK",
+      "ARMY",
+      "STAY"
+    ],
     "answer": 3
   },
   {
     "category": "kpop",
     "question": "Quel groupe est connu pour la chanson Cheer Up ?",
-    "options": ["TWICE", "ITZY", "aespa", "Girls' Generation"],
+    "options": [
+      "TWICE",
+      "ITZY",
+      "aespa",
+      "Girls' Generation"
+    ],
     "answer": 1
   },
   {
     "category": "kpop",
     "question": "Quel est le nom du fandom de BLACKPINK ?",
-    "options": ["BLINK", "ARMY", "MOA", "MIDZY"],
+    "options": [
+      "BLINK",
+      "ARMY",
+      "MOA",
+      "MIDZY"
+    ],
     "answer": 1
   },
   {
     "category": "kpop",
     "question": "Quel groupe a pour membres Bang Chan, Felix et Hyunjin ?",
-    "options": ["Stray Kids", "ATEEZ", "SEVENTEEN", "TXT"],
+    "options": [
+      "Stray Kids",
+      "ATEEZ",
+      "SEVENTEEN",
+      "TXT"
+    ],
     "answer": 1
   },
   {
     "category": "kpop",
     "question": "Quel groupe féminin a interprété la chanson Next Level ?",
-    "options": ["NewJeans", "aespa", "MAMAMOO", "ITZY"],
+    "options": [
+      "NewJeans",
+      "aespa",
+      "MAMAMOO",
+      "ITZY"
+    ],
     "answer": 2
   },
   {
     "category": "kpop",
     "question": "Quel artiste de BTS est connu pour la chanson solo Like Crazy ?",
-    "options": ["Jimin", "RM", "Jin", "SUGA"],
+    "options": [
+      "Jimin",
+      "RM",
+      "Jin",
+      "SUGA"
+    ],
     "answer": 1
   },
   {
     "category": "films",
     "question": "Quel film met en scène le personnage de Jack Sparrow ?",
-    "options": ["Indiana Jones", "Pirates des Caraïbes", "Le Seigneur des anneaux", "Gladiator"],
+    "options": [
+      "Indiana Jones",
+      "Pirates des Caraïbes",
+      "Le Seigneur des anneaux",
+      "Gladiator"
+    ],
     "answer": 2
   },
   {
     "category": "films",
     "question": "Dans Matrix, quelle pilule Neo choisit-il ?",
-    "options": ["La pilule bleue", "La pilule rouge", "La pilule verte", "La pilule noire"],
+    "options": [
+      "La pilule bleue",
+      "La pilule rouge",
+      "La pilule verte",
+      "La pilule noire"
+    ],
     "answer": 2
   },
   {
     "category": "films",
     "question": "Quel film raconte l'histoire du paquebot qui coule en 1912 ?",
-    "options": ["Titanic", "Pearl Harbor", "Apollo 13", "Dunkerque"],
+    "options": [
+      "Titanic",
+      "Pearl Harbor",
+      "Apollo 13",
+      "Dunkerque"
+    ],
     "answer": 1
   },
   {
     "category": "films",
     "question": "Quel acteur joue Iron Man dans l'univers Marvel ?",
-    "options": ["Chris Evans", "Robert Downey Jr.", "Chris Hemsworth", "Mark Ruffalo"],
+    "options": [
+      "Chris Evans",
+      "Robert Downey Jr.",
+      "Chris Hemsworth",
+      "Mark Ruffalo"
+    ],
     "answer": 2
   },
   {
     "category": "films",
     "question": "Dans Le Roi Lion, comment s'appelle le père de Simba ?",
-    "options": ["Scar", "Mufasa", "Timon", "Rafiki"],
+    "options": [
+      "Scar",
+      "Mufasa",
+      "Timon",
+      "Rafiki"
+    ],
     "answer": 2
   },
   {
     "category": "films",
     "question": "Quel réalisateur a réalisé Jurassic Park ?",
-    "options": ["James Cameron", "Christopher Nolan", "Steven Spielberg", "George Lucas"],
+    "options": [
+      "James Cameron",
+      "Christopher Nolan",
+      "Steven Spielberg",
+      "George Lucas"
+    ],
     "answer": 3
   },
   {
     "category": "films",
     "question": "Dans Harry Potter, quelle maison accueille Harry ?",
-    "options": ["Serpentard", "Poufsouffle", "Serdaigle", "Gryffondor"],
+    "options": [
+      "Serpentard",
+      "Poufsouffle",
+      "Serdaigle",
+      "Gryffondor"
+    ],
     "answer": 4
   },
   {
     "category": "films",
     "question": "Quel film d'animation met en scène Woody et Buzz l'Éclair ?",
-    "options": ["Toy Story", "Cars", "Shrek", "Coco"],
+    "options": [
+      "Toy Story",
+      "Cars",
+      "Shrek",
+      "Coco"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "sciences",
+    "question": "Quelle est l’unité de mesure de la force dans le système international ?",
+    "options": [
+      "Le watt",
+      "Le newton",
+      "Le joule",
+      "Le pascal"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "sciences",
+    "question": "Quel organe pompe le sang dans le corps humain ?",
+    "options": [
+      "Le foie",
+      "Le cerveau",
+      "Le cœur",
+      "Le poumon"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "sciences",
+    "question": "Quelle est la formule chimique de l’eau ?",
+    "options": [
+      "CO2",
+      "O2",
+      "NaCl",
+      "H2O"
+    ],
+    "answer": 4
+  },
+  {
+    "category": "sciences",
+    "question": "Quelle planète est la plus proche du Soleil ?",
+    "options": [
+      "Vénus",
+      "Mercure",
+      "Mars",
+      "La Terre"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "sciences",
+    "question": "Quel gaz les plantes absorbent-elles principalement lors de la photosynthèse ?",
+    "options": [
+      "L’oxygène",
+      "L’azote",
+      "Le dioxyde de carbone",
+      "L’hydrogène"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "sciences",
+    "question": "Combien d’os compte environ le squelette humain adulte ?",
+    "options": [
+      "106",
+      "206",
+      "306",
+      "406"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "sciences",
+    "question": "Quel phénomène explique la chute des objets vers le sol ?",
+    "options": [
+      "La gravité",
+      "La réfraction",
+      "La conduction",
+      "La fusion"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "sciences",
+    "question": "Quel est le plus grand organe du corps humain ?",
+    "options": [
+      "Le cœur",
+      "Le foie",
+      "La peau",
+      "Le poumon"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "histoire",
+    "question": "En quelle année la Révolution française a-t-elle commencé ?",
+    "options": [
+      "1689",
+      "1789",
+      "1889",
+      "1989"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "histoire",
+    "question": "Qui fut le premier empereur des Français ?",
+    "options": [
+      "Louis XIV",
+      "Charlemagne",
+      "Napoléon Bonaparte",
+      "Clovis"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "histoire",
+    "question": "Quelle civilisation a construit Machu Picchu ?",
+    "options": [
+      "Les Incas",
+      "Les Romains",
+      "Les Vikings",
+      "Les Mayas"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "histoire",
+    "question": "Quel événement a eu lieu le 6 juin 1944 ?",
+    "options": [
+      "La chute de Berlin",
+      "Le débarquement de Normandie",
+      "La signature de l’armistice",
+      "La création de l’ONU"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "histoire",
+    "question": "Quelle ville antique fut ensevelie par l’éruption du Vésuve ?",
+    "options": [
+      "Pompéi",
+      "Athènes",
+      "Carthage",
+      "Alexandrie"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "histoire",
+    "question": "Quel peuple est à l’origine de la démocratie athénienne ?",
+    "options": [
+      "Les Égyptiens",
+      "Les Grecs",
+      "Les Perses",
+      "Les Gaulois"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "histoire",
+    "question": "Quel mur est tombé en 1989, marquant un tournant en Europe ?",
+    "options": [
+      "Le mur d’Hadrien",
+      "Le mur de Berlin",
+      "La Grande Muraille",
+      "Le mur des Lamentations"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "histoire",
+    "question": "Comment s’appelait le navire de Christophe Colomb arrivé en Amérique en 1492 ?",
+    "options": [
+      "La Santa Maria",
+      "Le Titanic",
+      "La Mayflower",
+      "Le Beagle"
+    ],
     "answer": 1
   }
 ]
