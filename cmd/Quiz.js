@@ -13,7 +13,8 @@ const CATEGORIES = {
   culture: 'Culture générale',
   foot: 'Football',
   musique: 'Musique',
-  horreur: 'Films d’horreur'
+  horreur: 'Films d’horreur',
+  kpop: 'K-pop'
 };
 
 function normalize(value) {
@@ -184,7 +185,7 @@ ovlcmd({
   nom_cmd: 'quiz',
   classe: 'Jeux',
   react: '🧠',
-  desc: 'Quiz anime, culture générale, football, musique et films d’horreur.',
+  desc: 'Quiz anime, culture générale, football, musique, K-pop et films d’horreur.',
   alias: ['quizz']
 }, runQuizCommand);
 

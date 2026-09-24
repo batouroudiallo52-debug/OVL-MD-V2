@@ -240,6 +240,54 @@
     "answer": 1
   },
   {
+    "category": "kpop",
+    "question": "Quel groupe a sorti la chanson Dynamite ?",
+    "options": ["BLACKPINK", "BTS", "EXO", "TWICE"],
+    "answer": 2
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe féminin a interprété la chanson DDU-DU DDU-DU ?",
+    "options": ["BLACKPINK", "Red Velvet", "IVE", "LE SSERAFIM"],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Comment appelle-t-on les fans de BTS ?",
+    "options": ["ONCE", "BLINK", "ARMY", "STAY"],
+    "answer": 3
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe est connu pour la chanson Cheer Up ?",
+    "options": ["TWICE", "ITZY", "aespa", "Girls' Generation"],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel est le nom du fandom de BLACKPINK ?",
+    "options": ["BLINK", "ARMY", "MOA", "MIDZY"],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe a pour membres Bang Chan, Felix et Hyunjin ?",
+    "options": ["Stray Kids", "ATEEZ", "SEVENTEEN", "TXT"],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe féminin a interprété la chanson Next Level ?",
+    "options": ["NewJeans", "aespa", "MAMAMOO", "ITZY"],
+    "answer": 2
+  },
+  {
+    "category": "kpop",
+    "question": "Quel artiste de BTS est connu pour la chanson solo Like Crazy ?",
+    "options": ["Jimin", "RM", "Jin", "SUGA"],
+    "answer": 1
+  },
+  {
     "category": "films",
     "question": "Quel film met en scène le personnage de Jack Sparrow ?",
     "options": ["Indiana Jones", "Pirates des Caraïbes", "Le Seigneur des anneaux", "Gladiator"],
