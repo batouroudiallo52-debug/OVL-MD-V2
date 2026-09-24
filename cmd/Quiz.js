@@ -121,19 +121,21 @@ async function answerQuiz(chatId, sock, player, answer) {
   const active = activeQuizzes.get(chatId);
   if (!active || Date.now() >= active.expiresAt) return false;
 
+  const selectedAnswer = Number(answer);
+  if (!Number.isInteger(selectedAnswer) || selectedAnswer < 1 || selectedAnswer > 4) return false;
+
   const score = getScore(chatId, player);
   score.attempts += 1;
-  if (Number(answer) !== active.question.answer) {
-    await sock.sendMessage(chatId, {
-      text: `❌ Mauvaise réponse, @${player.split('@')[0]}. Essaie encore avec *1*, *2*, *3* ou *4*.`
-    });
-    return true;
-  }
 
-  score.points += 1;
+  const isCorrect = selectedAnswer === active.question.answer;
+  if (isCorrect) score.points += 1;
+  const correctAnswer = active.question.options[active.question.answer - 1];
   const nextGame = startQuiz(chatId, player, active.category, sock);
+
   await sock.sendMessage(chatId, {
-    text: `✅ Bonne réponse, @${player.split('@')[0]} ! +1 point.\n\nScore : *${score.points}*\n\n${formatQuestion(nextGame)}`
+    text: isCorrect
+      ? `✅ Bonne réponse, @${player.split('@')[0]} ! +1 point.\n\nScore : *${score.points}*\n\n${formatQuestion(nextGame)}`
+      : `❌ Mauvaise réponse, @${player.split('@')[0]}.\nLa bonne réponse était *${active.question.answer} — ${correctAnswer}*.\n\nScore : *${score.points}*\n\n${formatQuestion(nextGame)}`
   });
   return true;
 }
@@ -161,7 +163,7 @@ async function runQuizCommand(jid, sock, context = {}) {
 
   if (!firstArg || ['aide', 'help', 'categories', 'catégories'].includes(firstArg)) {
     return sock.sendMessage(chatId, {
-      text: `🧠 *QUIZ — CATÉGORIES DISPONIBLES*\n\n${formatCategories()}\n\nAprès la question, réponds simplement avec *1*, *2*, *3* ou *4*.\n\n*.quiz score* — voir les scores\n*.quiz stop* — arrêter la partie`
+      text: `🧠 *QUIZ — CATÉGORIES DISPONIBLES*\n\n${formatCategories()}\n\nAprès la question, réponds uniquement avec *1*, *2*, *3* ou *4*.\nLa réponse est corrigée automatiquement et la question suivante est envoyée immédiatement.\n\n*.quiz score* — voir les scores\n*.quiz stop* — arrêter la partie`
     });
   }
 

@@ -790,5 +790,533 @@
       "Le Beagle"
     ],
     "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans One Piece, comment s’appelle le sabreur de l’équipage de Luffy ?",
+    "options": [
+      "Sanji",
+      "Usopp",
+      "Zoro",
+      "Franky"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "anime",
+    "question": "Dans Naruto, quel est le nom du démon renard scellé en Naruto ?",
+    "options": [
+      "Shukaku",
+      "Kurama",
+      "Matatabi",
+      "Gyûki"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "anime",
+    "question": "Dans Dragon Ball Z, quelle transformation vient après le Super Saiyan ?",
+    "options": [
+      "Super Saiyan 2",
+      "Ultra Instinct",
+      "Kaioken",
+      "Super Saiyan God"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Demon Slayer, quel souffle utilise principalement Tanjiro au début ?",
+    "options": [
+      "Souffle de l’Eau",
+      "Souffle de la Foudre",
+      "Souffle de la Brume",
+      "Souffle de la Flamme"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Bleach, comment s’appelle le sabre d’Ichigo ?",
+    "options": [
+      "Zangetsu",
+      "Sode no Shirayuki",
+      "Senbonzakura",
+      "Ryūjin Jakka"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Pokémon, quel est le premier Pokémon de Sacha dans la série ?",
+    "options": [
+      "Carapuce",
+      "Bulbizarre",
+      "Pikachu",
+      "Salamèche"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "anime",
+    "question": "Dans Hunter x Hunter, comment s’appelle l’ami de Gon aux cheveux blancs ?",
+    "options": [
+      "Kurapika",
+      "Leolio",
+      "Hisoka",
+      "Kirua"
+    ],
+    "answer": 4
+  },
+  {
+    "category": "anime",
+    "question": "Dans L’Attaque des Titans, quel est le prénom du personnage principal ?",
+    "options": [
+      "Eren",
+      "Armin",
+      "Reiner",
+      "Erwin"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "culture",
+    "question": "Quelle est la capitale du Japon ?",
+    "options": [
+      "Kyoto",
+      "Tokyo",
+      "Osaka",
+      "Hiroshima"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "culture",
+    "question": "Quel est le plus grand désert chaud du monde ?",
+    "options": [
+      "Le Sahara",
+      "Le Gobi",
+      "Le Kalahari",
+      "Atacama"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "culture",
+    "question": "Combien de minutes compte une heure ?",
+    "options": [
+      "30",
+      "45",
+      "60",
+      "90"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "culture",
+    "question": "Quelle langue compte le plus de locuteurs natifs ?",
+    "options": [
+      "L’anglais",
+      "L’espagnol",
+      "Le français",
+      "Le mandarin"
+    ],
+    "answer": 4
+  },
+  {
+    "category": "culture",
+    "question": "Quel est le symbole chimique de l’or ?",
+    "options": [
+      "Ag",
+      "Au",
+      "Fe",
+      "Or"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "culture",
+    "question": "Qui a peint La Joconde ?",
+    "options": [
+      "Léonard de Vinci",
+      "Picasso",
+      "Van Gogh",
+      "Monet"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "culture",
+    "question": "Combien de jours compte une année bissextile ?",
+    "options": [
+      "364",
+      "365",
+      "366",
+      "367"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "culture",
+    "question": "Quel pays est surnommé le pays du Soleil-Levant ?",
+    "options": [
+      "La Chine",
+      "La Corée du Sud",
+      "La Thaïlande",
+      "Le Japon"
+    ],
+    "answer": 4
+  },
+  {
+    "category": "foot",
+    "question": "Combien de minutes dure normalement un match de football ?",
+    "options": [
+      "60",
+      "75",
+      "90",
+      "120"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "foot",
+    "question": "Quel joueur est surnommé CR7 ?",
+    "options": [
+      "Cristiano Ronaldo",
+      "Lionel Messi",
+      "Neymar",
+      "Karim Benzema"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "foot",
+    "question": "Quel pays a remporté la Coupe du monde 2014 ?",
+    "options": [
+      "Brésil",
+      "Allemagne",
+      "Argentine",
+      "Espagne"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "foot",
+    "question": "Dans quel club évoluait historiquement Diego Maradona en Italie ?",
+    "options": [
+      "La Juventus",
+      "L’Inter Milan",
+      "Le Napoli",
+      "La Roma"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "foot",
+    "question": "Quelle surface est utilisée pour un penalty ?",
+    "options": [
+      "Le rond central",
+      "La surface de réparation",
+      "La ligne de touche",
+      "La surface technique"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "foot",
+    "question": "Quel pays a remporté la Coupe du monde 2010 ?",
+    "options": [
+      "Les Pays-Bas",
+      "L’Allemagne",
+      "L’Espagne",
+      "L’Italie"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "foot",
+    "question": "Quel poste porte généralement le numéro 1 ?",
+    "options": [
+      "Le gardien",
+      "L’attaquant",
+      "L’arbitre",
+      "Le capitaine"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "foot",
+    "question": "Quel club est surnommé les Reds ?",
+    "options": [
+      "Chelsea",
+      "Liverpool",
+      "Arsenal",
+      "Everton"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "horreur",
+    "question": "Dans L’Exorciste, quel phénomène touche la jeune Regan ?",
+    "options": [
+      "Une malédiction familiale",
+      "Une possession démoniaque",
+      "Une invasion extraterrestre",
+      "Une amnésie"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "horreur",
+    "question": "Quel tueur porte un masque de hockey dans Vendredi 13 ?",
+    "options": [
+      "Michael Myers",
+      "Freddy Krueger",
+      "Jason Voorhees",
+      "Ghostface"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "horreur",
+    "question": "Dans Ça, quelle forme prend souvent Pennywise ?",
+    "options": [
+      "Un clown",
+      "Un vampire",
+      "Un loup",
+      "Un médecin"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Quel est le prénom du tueur dans Halloween ?",
+    "options": [
+      "Norman Bates",
+      "Michael Myers",
+      "Jason Voorhees",
+      "Billy Loomis"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "horreur",
+    "question": "Quel film met en scène une famille traquée par des créatures sensibles au bruit ?",
+    "options": [
+      "Sans un bruit",
+      "Hérédité",
+      "Midsommar",
+      "Us"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Dans Psychose, quel est le nom du propriétaire du motel ?",
+    "options": [
+      "Jack Torrance",
+      "Norman Bates",
+      "John Kramer",
+      "Samara Morgan"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "horreur",
+    "question": "Quel objet est utilisé pour communiquer avec les esprits dans de nombreux films ?",
+    "options": [
+      "Une planche Ouija",
+      "Un télescope",
+      "Un sifflet",
+      "Une boussole"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Dans Insidious, quel monde parallèle les personnages tentent-ils d’atteindre ?",
+    "options": [
+      "Le Purgatoire",
+      "The Further",
+      "Le Monde des Ombres",
+      "La Zone Rouge"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe a sorti la chanson Butter ?",
+    "options": [
+      "EXO",
+      "BTS",
+      "TWICE",
+      "SEVENTEEN"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "kpop",
+    "question": "Quel est le fandom de Stray Kids ?",
+    "options": [
+      "STAY",
+      "MOA",
+      "ONCE",
+      "CARAT"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe féminin a interprété la chanson Wannabe ?",
+    "options": [
+      "ITZY",
+      "IVE",
+      "NewJeans",
+      "Red Velvet"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe est composé de cinq membres et a sorti la chanson Blue Hour ?",
+    "options": [
+      "TXT",
+      "ATEEZ",
+      "NCT",
+      "EXO"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe a interprété la chanson Love Shot ?",
+    "options": [
+      "EXO",
+      "BTS",
+      "SHINee",
+      "GOT7"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel est le fandom de TWICE ?",
+    "options": [
+      "BLINK",
+      "ONCE",
+      "ARMY",
+      "MIDZY"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe féminin a sorti la chanson Hype Boy ?",
+    "options": [
+      "NewJeans",
+      "MAMAMOO",
+      "aespa",
+      "IVE"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe est connu pour la chanson God’s Menu ?",
+    "options": [
+      "Stray Kids",
+      "TXT",
+      "ENHYPEN",
+      "TREASURE"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "musique",
+    "question": "Quel instrument possède des cordes et se joue souvent avec un archet ?",
+    "options": [
+      "La trompette",
+      "Le violon",
+      "La flûte",
+      "Le piano"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "musique",
+    "question": "Quel groupe a chanté Hey Jude ?",
+    "options": [
+      "Queen",
+      "The Beatles",
+      "ABBA",
+      "Nirvana"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "musique",
+    "question": "Combien de notes compte la gamme musicale classique do-ré-mi-fa-sol-la-si ?",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "musique",
+    "question": "Quel artiste a interprété la chanson Imagine ?",
+    "options": [
+      "John Lennon",
+      "Elton John",
+      "David Bowie",
+      "Sting"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "musique",
+    "question": "Quel instrument est associé au reggae de Bob Marley ?",
+    "options": [
+      "La guitare",
+      "Le violoncelle",
+      "Le hautbois",
+      "La harpe"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "musique",
+    "question": "Quel genre musical est né à La Nouvelle-Orléans ?",
+    "options": [
+      "Le jazz",
+      "Le flamenco",
+      "Le tango",
+      "La techno"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "musique",
+    "question": "Qui a chanté Rolling in the Deep ?",
+    "options": [
+      "Adele",
+      "Rihanna",
+      "Beyoncé",
+      "Sia"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "musique",
+    "question": "Quel instrument possède généralement six cordes ?",
+    "options": [
+      "La guitare",
+      "La trompette",
+      "La batterie",
+      "Le saxophone"
+    ],
+    "answer": 1
   }
 ]
