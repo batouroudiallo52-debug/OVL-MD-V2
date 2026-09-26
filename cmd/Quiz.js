@@ -294,7 +294,9 @@ function shuffleQuestions(questions) {
 function chooseQuestion(game) {
   const question = game.questionQueue[game.index - 1];
   if (!question) throw new Error('La file de questions uniques est épuisée.');
-  game.used.add(questionKey(question.question));
+  const key = questionKey(question.question);
+  if (game.used.has(key)) throw new Error('Une question du quiz serait répétée.');
+  game.used.add(key);
   return question;
 }
 
@@ -320,7 +322,6 @@ function createGame(chatId, player, category, total, imageMode, sock, mode = 'cl
   };
   game.question = chooseQuestion(game);
   activeQuizzes.set(chatId, game);
-  scheduleRoundTimeout(chatId, sock, game);
   return game;
 }
 
@@ -385,10 +386,15 @@ async function revealRound(chatId, sock, game, reason) {
   game.index += 1;
   game.answers = new Map();
   game.question = chooseQuestion(game);
-  game.resolving = false;
-  scheduleRoundTimeout(chatId, sock, game);
   await sock.sendMessage(chatId, { text: result });
-  await sendQuestion(chatId, sock, game);
+  try {
+    await sendQuestion(chatId, sock, game);
+  } finally {
+    // Le délai commence après l’envoi effectif de la question, pas pendant
+    // la recherche ou le téléchargement éventuel de son image.
+    game.resolving = false;
+    scheduleRoundTimeout(chatId, sock, game);
+  }
 }
 
 async function answerQuiz(chatId, sock, player, answer) {
@@ -398,7 +404,7 @@ async function answerQuiz(chatId, sock, player, answer) {
   const normalizedAnswer = normalize(answer);
   const selectedAnswer = game.mode === 'true-false'
     ? (['vrai', 'true', '1'].includes(normalizedAnswer) ? 1 : ['faux', 'false', '2'].includes(normalizedAnswer) ? 2 : null)
-    : Number(answer);
+    : (/^[1-4]$/.test(String(answer).trim()) ? Number(answer) : null);
   if (!selectedAnswer || !Number.isInteger(selectedAnswer) || selectedAnswer < 1 || selectedAnswer > (game.mode === 'true-false' ? 2 : 4)) return false;
   if (game.answers.has(player)) return true;
 
@@ -444,7 +450,9 @@ async function runQuizCommand(jid, sock, context = {}) {
       await sock.sendMessage(chatId, {
         text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
       });
-      return sendQuestion(chatId, sock, game);
+      await sendQuestion(chatId, sock, game);
+      scheduleRoundTimeout(chatId, sock, game);
+      return;
     } catch (error) {
       console.error('[quiz selection]', error);
       return sock.sendMessage(chatId, { text: '❌ Impossible de démarrer cette catégorie pour le moment.' });
@@ -529,6 +537,7 @@ ovlcmd({
         text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
       });
       await sendQuestion(chatId, sock, game);
+      scheduleRoundTimeout(chatId, sock, game);
     } catch (error) {
       console.error('[quiz selection]', error);
       await sock.sendMessage(chatId, { text: '❌ Impossible de démarrer cette catégorie pour le moment.' });
