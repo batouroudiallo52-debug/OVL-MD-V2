@@ -12,6 +12,9 @@ const TRUE_FALSE_ALIASES = ['vrai', 'faux', 'vrai-faux', 'vraifaux', 'truefalse'
 const activeQuizzes = new Map();
 const pendingQuizSelections = new Map();
 const scores = new Map();
+// Historique des questions utilisées par conversation, catégorie et mode.
+// Il empêche les quiz successifs de reprendre une question déjà jouée.
+const quizHistory = new Map();
 const QUESTION_LIMITS = [10, 20, 30, 50, 100];
 const QUESTION_SELECTIONS = new Map([
   ['1', 10],
@@ -20,7 +23,7 @@ const QUESTION_SELECTIONS = new Map([
   ['4', 50],
   ['5', 100]
 ]);
-const ANSWER_TIMEOUT = 10_000;
+const ANSWER_TIMEOUT = 15_000;
 const IMAGE_SEARCH_TIMEOUT = 8_000;
 const imageSearchCache = new Map();
 
@@ -73,6 +76,23 @@ function questionKey(value) {
     .replace(/[^\p{L}\p{N}]+/gu, ' ')
     .trim()
     .replace(/\s+/g, ' ');
+}
+
+function historyKey(chatId, category, mode) {
+  return `${chatId}:${mode}:${category}`;
+}
+
+function getFreshQuestions(chatId, category, mode) {
+  const questions = loadQuestions(category, mode);
+  const used = quizHistory.get(historyKey(chatId, category, mode)) || new Set();
+  return questions.filter((question) => !used.has(questionKey(question.question)));
+}
+
+function reserveQuestions(chatId, category, mode, questions) {
+  const key = historyKey(chatId, category, mode);
+  const used = quizHistory.get(key) || new Set();
+  for (const question of questions) used.add(questionKey(question.question));
+  quizHistory.set(key, used);
 }
 
 function isTrueFalseCategory(value) {
@@ -236,7 +256,7 @@ function formatQuestion(game) {
   const options = game.question.options
     .map((option, index) => `   *${index + 1}.* ${option}`)
     .join('\n');
-  return `🧠 *QUIZ ${(game.mode === 'true-false' ? 'VRAI/FAUX' : CATEGORIES[game.category]).toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds uniquement avec le chiffre correspondant : *${game.mode === 'true-false' ? '1 ou 2' : '1, 2, 3 ou 4'}*.\n⏱️ Temps limite : *10 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
+  return `🧠 *QUIZ ${(game.mode === 'true-false' ? 'VRAI/FAUX' : CATEGORIES[game.category]).toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds uniquement avec le chiffre correspondant : *${game.mode === 'true-false' ? '1 ou 2' : '1, 2, 3 ou 4'}*.\n⏱️ Temps limite : *15 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
 }
 
 function playerLabel(player) {
@@ -301,10 +321,12 @@ function chooseQuestion(game) {
 }
 
 function createGame(chatId, player, category, total, imageMode, sock, mode = 'classic') {
-  const pool = loadQuestions(category, mode);
+  const pool = getFreshQuestions(chatId, category, mode);
   if (total > pool.length) {
-    throw new Error(`Cette partie demande ${total} questions, mais seulement ${pool.length} questions uniques sont disponibles.`);
+    throw new Error(`Cette partie demande ${total} nouvelles questions, mais seulement ${pool.length} restent inédites dans cette conversation.`);
   }
+  const questionQueue = shuffleQuestions(pool).slice(0, total);
+  reserveQuestions(chatId, category, mode, questionQueue);
   const game = {
     category,
     mode,
@@ -312,7 +334,7 @@ function createGame(chatId, player, category, total, imageMode, sock, mode = 'cl
     imageMode,
     index: 1,
     pool,
-    questionQueue: shuffleQuestions(pool).slice(0, total),
+    questionQueue,
     used: new Set(),
     question: null,
     answers: new Map(),
@@ -448,7 +470,7 @@ async function runQuizCommand(jid, sock, context = {}) {
       const total = QUESTION_SELECTIONS.get(firstArg);
       const game = createGame(chatId, pendingSelection.player, pendingSelection.category, total, pendingSelection.imageMode, sock, pendingSelection.mode);
       await sock.sendMessage(chatId, {
-        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
+        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *15 secondes*.`
       });
       await sendQuestion(chatId, sock, game);
       scheduleRoundTimeout(chatId, sock, game);
@@ -486,11 +508,15 @@ async function runQuizCommand(jid, sock, context = {}) {
     return sock.sendMessage(chatId, { text: `❌ Catégorie inconnue.\n\n${formatCategories()}\n\nMode spécial : *.quiz vrai-faux*` });
   }
 
-  const availableQuestions = loadQuestions(trueFalseMode ? TRUE_FALSE_CATEGORY : category, trueFalseMode ? 'true-false' : 'classic').length;
+  const availableQuestions = getFreshQuestions(
+    chatId,
+    trueFalseMode ? TRUE_FALSE_CATEGORY : category,
+    trueFalseMode ? 'true-false' : 'classic'
+  ).length;
   const selectionText = formatQuestionSelections(availableQuestions);
   if (!selectionText) {
     return sock.sendMessage(chatId, {
-      text: `❌ Cette catégorie ne contient que *${availableQuestions} question(s) unique(s)*. Il en faut au moins 10 pour démarrer un quiz sans répétition.`
+      text: `❌ Il ne reste que *${availableQuestions} question(s) inédite(s)* dans cette catégorie. Il en faut au moins 10 pour démarrer un nouveau quiz sans répétition.`
     });
   }
 
@@ -502,7 +528,7 @@ async function runQuizCommand(jid, sock, context = {}) {
     sock
   });
   return sock.sendMessage(chatId, {
-    text: `🎮 *${trueFalseMode ? 'Vrai/Faux' : CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n${selectionText}\n\nLes questions ne sont jamais répétées pendant une partie.\n\nRéponds uniquement avec le numéro correspondant.`
+    text: `🎮 *${trueFalseMode ? 'Vrai/Faux' : CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n${selectionText}\n\nLes questions ne sont jamais répétées dans cette partie ni dans tes quiz précédents de cette catégorie.\n\nRéponds uniquement avec le numéro correspondant.`
   });
 }
 
@@ -510,7 +536,7 @@ ovlcmd({
   nom_cmd: 'quiz',
   classe: 'Jeux',
   react: '🧠',
-  desc: 'Quiz à choix multiples : sélection 10/20/30/50/100 questions, sans répétition, réponses 1-4 et 10 secondes par question.',
+  desc: 'Quiz à choix multiples : sélection 10/20/30/50/100 questions, sans répétition entre les quiz, réponses 1-4 et 15 secondes par question.',
   alias: ['quizz']
 }, runQuizCommand);
 
@@ -534,7 +560,7 @@ ovlcmd({
       const total = QUESTION_SELECTIONS.get(answer);
       const game = createGame(chatId, pending.player, pending.category, total, pending.imageMode, sock, pending.mode);
       await sock.sendMessage(chatId, {
-        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
+        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *15 secondes*.`
       });
       await sendQuestion(chatId, sock, game);
       scheduleRoundTimeout(chatId, sock, game);
@@ -553,6 +579,7 @@ module.exports = {
   activeQuizzes,
   pendingQuizSelections,
   scores,
+  quizHistory,
   loadQuestions,
   CATEGORIES,
   findQuestionImage,
