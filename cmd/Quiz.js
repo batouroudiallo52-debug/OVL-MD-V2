@@ -10,9 +10,11 @@ const TRUE_FALSE_FILE = path.join(__dirname, '..', 'lib', 'quiz_true_false.json'
 const TRUE_FALSE_CATEGORY = 'vrai-faux';
 const TRUE_FALSE_ALIASES = ['vrai', 'faux', 'vrai-faux', 'vraifaux', 'truefalse', 'tf'];
 const activeQuizzes = new Map();
+const pendingQuizSelections = new Map();
 const scores = new Map();
-const QUESTION_LIMITS = [10, 30, 60, 100];
-const ANSWER_TIMEOUT = 90_000;
+const QUESTION_LIMITS = [10, 20, 30];
+const QUESTION_SELECTIONS = new Map([['1', 10], ['2', 20], ['3', 30]]);
+const ANSWER_TIMEOUT = 10_000;
 const IMAGE_SEARCH_TIMEOUT = 8_000;
 const imageSearchCache = new Map();
 
@@ -204,7 +206,7 @@ function formatQuestion(game) {
   const options = game.question.options
     .map((option, index) => `   *${index + 1}.* ${option}`)
     .join('\n');
-  return `🧠 *QUIZ ${(game.mode === 'true-false' ? 'VRAI/FAUX' : CATEGORIES[game.category]).toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds avec *${game.mode === 'true-false' ? 'Vrai ou Faux (ou 1/2)' : '1, 2, 3 ou 4'}*.\n⏱️ Réponses ouvertes pendant 90 secondes.\n✅ La correction est automatique dès qu’un joueur trouve ou que tous les joueurs connus ont répondu.`;
+  return `🧠 *QUIZ ${(game.mode === 'true-false' ? 'VRAI/FAUX' : CATEGORIES[game.category]).toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds uniquement avec le chiffre correspondant : *${game.mode === 'true-false' ? '1 ou 2' : '1, 2, 3 ou 4'}*.\n⏱️ Temps limite : *10 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
 }
 
 function playerLabel(player) {
@@ -313,18 +315,17 @@ async function revealRound(chatId, sock, game, reason) {
 
   const correctAnswer = game.question.answer;
   const correctText = game.question.options[correctAnswer - 1];
-  const winners = [...game.answers.entries()]
-    .filter(([, answer]) => answer === correctAnswer)
-    .map(([player]) => player);
+  const winner = [...game.answers.entries()]
+    .find(([, answer]) => answer === correctAnswer)?.[0] || null;
 
   for (const [player] of game.answers) {
     getGlobalScore(chatId, player).attempts += 1;
   }
-  for (const player of winners) getGlobalScore(chatId, player).points += 1;
+  if (winner) getGlobalScore(chatId, winner).points += 1;
 
   let result;
-  if (winners.length) {
-    result = `✅ ${winners.map(playerLabel).join(', ')} a trouvé la bonne réponse !\n🎯 Réponse : *${correctAnswer} — ${correctText}*`;
+  if (winner) {
+    result = `✅ ${playerLabel(winner)} a trouvé la bonne réponse et gagne *1 point* !\n🎯 Réponse : *${correctAnswer} — ${correctText}*`;
   } else if (reason === 'timeout') {
     result = `⏱️ Personne n’a trouvé à temps.\n🎯 La bonne réponse était : *${correctAnswer} — ${correctText}*`;
   } else {
@@ -367,11 +368,6 @@ async function answerQuiz(chatId, sock, player, answer) {
     return true;
   }
 
-  // Quand plusieurs joueurs participent, la manche est corrigée dès que
-  // chaque joueur déjà inscrit a répondu. Le délai couvre le cas d’un seul joueur.
-  if (game.participants.size > 1 && [...game.participants].every((participant) => game.answers.has(participant))) {
-    await revealRound(chatId, sock, game, 'all_answered');
-  }
   return true;
 }
 
@@ -397,9 +393,25 @@ async function runQuizCommand(jid, sock, context = {}) {
     return answerQuiz(chatId, sock, player, firstArg);
   }
 
+  const pendingSelection = pendingQuizSelections.get(chatId);
+  if (pendingSelection && QUESTION_SELECTIONS.has(firstArg)) {
+    pendingQuizSelections.delete(chatId);
+    try {
+      const total = QUESTION_SELECTIONS.get(firstArg);
+      const game = createGame(chatId, pendingSelection.player, pendingSelection.category, total, pendingSelection.imageMode, sock, pendingSelection.mode);
+      await sock.sendMessage(chatId, {
+        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
+      });
+      return sendQuestion(chatId, sock, game);
+    } catch (error) {
+      console.error('[quiz selection]', error);
+      return sock.sendMessage(chatId, { text: '❌ Impossible de démarrer cette catégorie pour le moment.' });
+    }
+  }
+
   if (!firstArg || ['aide', 'help', 'categories', 'catégories'].includes(firstArg)) {
     return sock.sendMessage(chatId, {
-      text: `🧠 *QUIZ — CATÉGORIES DISPONIBLES*\n\n${formatCategories()}\n\n🎲 *Mode Vrai/Faux* : *.quiz vrai-faux 10*\nRéponds par *Vrai*, *Faux*, *1* ou *2*.\n\nFormats acceptés : *10*, *30*, *60* ou *100* questions.\nExemple texte : *.quiz anime 30*\nExemple avec images : *.quiz anime image 30*\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. La correction et la question suivante sont automatiques.\n\n*.quiz score* — voir les scores\n*.quiz stop* — arrêter la partie`
+      text: `🧠 *QUIZ — CATÉGORIES DISPONIBLES*\n\n${formatCategories()}\n\nLance une catégorie avec *.quiz anime*. Le bot te demandera ensuite le nombre de questions.\n\n*.quiz score* — voir les scores\n*.quiz stop* — arrêter la partie`
     });
   }
 
@@ -407,6 +419,7 @@ async function runQuizCommand(jid, sock, context = {}) {
     const game = activeQuizzes.get(chatId);
     if (game) clearRoundTimer(game);
     activeQuizzes.delete(chatId);
+    pendingQuizSelections.delete(chatId);
     return sock.sendMessage(chatId, { text: '🛑 Quiz arrêté.' });
   }
 
@@ -418,33 +431,33 @@ async function runQuizCommand(jid, sock, context = {}) {
 
   const trueFalseMode = isTrueFalseCategory(firstArg);
   const category = parseCategory(args);
-  const total = parseTotal(args);
   const imageMode = hasImageOption(args);
   if (!trueFalseMode && !CATEGORIES[category]) {
-    return sock.sendMessage(chatId, { text: `❌ Catégorie inconnue.\n\n${formatCategories()}\n\nMode spécial : *.quiz vrai-faux 10*` });
+    return sock.sendMessage(chatId, { text: `❌ Catégorie inconnue.\n\n${formatCategories()}\n\nMode spécial : *.quiz vrai-faux*` });
   }
 
-  try {
-    const game = createGame(chatId, player, trueFalseMode ? TRUE_FALSE_CATEGORY : category, total, imageMode, sock, trueFalseMode ? 'true-false' : 'classic');
-    await sock.sendMessage(chatId, {
-      text: `🎮 Partie de *${total} questions* lancée en mode *${trueFalseMode ? 'Vrai/Faux' : CATEGORIES[category]}*${imageMode && !trueFalseMode ? ' avec images' : ''}.`
-    });
-    return sendQuestion(chatId, sock, game);
-  } catch (error) {
-    console.error('[quiz]', error);
-    return sock.sendMessage(chatId, { text: '❌ Impossible de charger cette catégorie pour le moment.' });
-  }
+  pendingQuizSelections.set(chatId, {
+    category: trueFalseMode ? TRUE_FALSE_CATEGORY : category,
+    mode: trueFalseMode ? 'true-false' : 'classic',
+    imageMode,
+    player,
+    sock
+  });
+  return sock.sendMessage(chatId, {
+    text: `🎮 *${trueFalseMode ? 'Vrai/Faux' : CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n*1* — 10 questions\n*2* — 20 questions\n*3* — 30 questions\n\nRéponds uniquement avec *1*, *2* ou *3*.`
+  });
 }
 
 ovlcmd({
   nom_cmd: 'quiz',
   classe: 'Jeux',
   react: '🧠',
-  desc: 'Quiz avec textes ou images, 13 catégories et 10, 30, 60 ou 100 questions.',
+  desc: 'Quiz à choix multiples : sélection 10/20/30 questions, réponses 1-4 et 10 secondes par question.',
   alias: ['quizz']
 }, runQuizCommand);
 
-// Réception des réponses seules « 1 », « 2 », « 3 » ou « 4 », sans préfixe.
+// Réception des réponses seules « 1 », « 2 » ou « 3 » pour la sélection,
+// puis « 1 », « 2 », « 3 » ou « 4 » pour les questions.
 ovlcmd({
   nom_cmd: 'quiz_answer',
   isfunc: true,
@@ -454,12 +467,32 @@ ovlcmd({
   const chatId = getChatId(context, jid);
   const raw = getRawText(context);
   const answer = raw.match(/^(1|2|3|4|vrai|faux|true|false)$/i)?.[0];
-  if (!answer || !activeQuizzes.has(chatId)) return;
+  if (!answer) return;
+
+  const pending = pendingQuizSelections.get(chatId);
+  if (pending && QUESTION_SELECTIONS.has(answer)) {
+    pendingQuizSelections.delete(chatId);
+    try {
+      const total = QUESTION_SELECTIONS.get(answer);
+      const game = createGame(chatId, pending.player, pending.category, total, pending.imageMode, sock, pending.mode);
+      await sock.sendMessage(chatId, {
+        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
+      });
+      await sendQuestion(chatId, sock, game);
+    } catch (error) {
+      console.error('[quiz selection]', error);
+      await sock.sendMessage(chatId, { text: '❌ Impossible de démarrer cette catégorie pour le moment.' });
+    }
+    return;
+  }
+
+  if (!activeQuizzes.has(chatId)) return;
   await answerQuiz(chatId, sock, getSender(context), answer);
 });
 
 module.exports = {
   activeQuizzes,
+  pendingQuizSelections,
   scores,
   loadQuestions,
   CATEGORIES,
