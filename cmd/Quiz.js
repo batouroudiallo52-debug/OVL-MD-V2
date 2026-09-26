@@ -68,6 +68,13 @@ function normalize(value) {
     .toLowerCase();
 }
 
+function questionKey(value) {
+  return normalize(value)
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
+}
+
 function isTrueFalseCategory(value) {
   return TRUE_FALSE_ALIASES.includes(normalize(value));
 }
@@ -160,7 +167,7 @@ function loadQuestions(category, mode = 'classic') {
   // ou des espaces superflus dans le texte de la question.
   const uniqueQuestions = new Map();
   for (const item of filtered) {
-    const key = normalize(item.question).replace(/\s+/g, ' ');
+    const key = questionKey(item.question);
     if (!uniqueQuestions.has(key)) uniqueQuestions.set(key, item);
   }
   return [...uniqueQuestions.values()];
@@ -287,7 +294,7 @@ function shuffleQuestions(questions) {
 function chooseQuestion(game) {
   const question = game.questionQueue[game.index - 1];
   if (!question) throw new Error('La file de questions uniques est épuisée.');
-  game.used.add(normalize(question.question).replace(/\s+/g, ' '));
+  game.used.add(questionKey(question.question));
   return question;
 }
 
