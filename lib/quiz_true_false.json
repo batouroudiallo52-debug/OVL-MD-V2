@@ -1,0 +1,22 @@
+[
+  {"question":"Le soleil est une étoile.","options":["Vrai","Faux"],"answer":1},
+  {"question":"La capitale de la France est Lyon.","options":["Vrai","Faux"],"answer":2},
+  {"question":"L'eau gèle à 0 °C dans des conditions normales.","options":["Vrai","Faux"],"answer":1},
+  {"question":"Le continent africain est traversé par l'équateur.","options":["Vrai","Faux"],"answer":1},
+  {"question":"Mars est la planète la plus proche du Soleil.","options":["Vrai","Faux"],"answer":2},
+  {"question":"Un triangle possède trois côtés.","options":["Vrai","Faux"],"answer":1},
+  {"question":"Le français est la langue officielle du Brésil.","options":["Vrai","Faux"],"answer":2},
+  {"question":"La photosynthèse permet aux plantes de produire de l'oxygène.","options":["Vrai","Faux"],"answer":1},
+  {"question":"Le mont Everest est situé en Afrique.","options":["Vrai","Faux"],"answer":2},
+  {"question":"La baleine est un mammifère.","options":["Vrai","Faux"],"answer":1},
+  {"question":"Le nombre 17 est un nombre pair.","options":["Vrai","Faux"],"answer":2},
+  {"question":"La Terre tourne autour du Soleil.","options":["Vrai","Faux"],"answer":1},
+  {"question":"L'océan Atlantique est plus grand que l'océan Pacifique.","options":["Vrai","Faux"],"answer":2},
+  {"question":"Le symbole chimique de l'or est Au.","options":["Vrai","Faux"],"answer":1},
+  {"question":"William Shakespeare a écrit Roméo et Juliette.","options":["Vrai","Faux"],"answer":1},
+  {"question":"La lumière se déplace moins vite que le son.","options":["Vrai","Faux"],"answer":2},
+  {"question":"Le Sahara est un désert.","options":["Vrai","Faux"],"answer":1},
+  {"question":"La langue la plus parlée au Mexique est le portugais.","options":["Vrai","Faux"],"answer":2},
+  {"question":"Un octet contient généralement huit bits.","options":["Vrai","Faux"],"answer":1},
+  {"question":"Le cœur humain possède quatre cavités.","options":["Vrai","Faux"],"answer":1}
+]

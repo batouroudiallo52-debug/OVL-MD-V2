@@ -6,6 +6,9 @@ const axios = require('axios');
 const { ovlcmd } = require('../lib/ovlcmd');
 
 const QUESTIONS_FILE = path.join(__dirname, '..', 'lib', 'quiz_questions.json');
+const TRUE_FALSE_FILE = path.join(__dirname, '..', 'lib', 'quiz_true_false.json');
+const TRUE_FALSE_CATEGORY = 'vrai-faux';
+const TRUE_FALSE_ALIASES = ['vrai', 'faux', 'vrai-faux', 'vraifaux', 'truefalse', 'tf'];
 const activeQuizzes = new Map();
 const scores = new Map();
 const QUESTION_LIMITS = [10, 30, 60, 100];
@@ -54,6 +57,10 @@ function normalize(value) {
     .replace(/[\u0300-\u036f]/g, '')
     .trim()
     .toLowerCase();
+}
+
+function isTrueFalseCategory(value) {
+  return TRUE_FALSE_ALIASES.includes(normalize(value));
 }
 
 function isImageUrl(value) {
@@ -127,16 +134,16 @@ async function findQuestionImage(question, category) {
   return foundImage || CATEGORY_IMAGES[category] || null;
 }
 
-function loadQuestions(category) {
-  const questions = JSON.parse(fs.readFileSync(QUESTIONS_FILE, 'utf8'));
+function loadQuestions(category, mode = 'classic') {
+  const file = mode === 'true-false' ? TRUE_FALSE_FILE : QUESTIONS_FILE;
+  const questions = JSON.parse(fs.readFileSync(file, 'utf8'));
   if (!Array.isArray(questions)) throw new Error('La banque de questions est invalide.');
   const filtered = questions.filter((item) => (
-    item && CATEGORIES[item.category] &&
-    (!category || item.category === category) &&
-    typeof item.question === 'string' && item.question.trim() &&
-    Array.isArray(item.options) && item.options.length === 4 &&
+    item && typeof item.question === 'string' && item.question.trim() &&
+    Array.isArray(item.options) && item.options.length === (mode === 'true-false' ? 2 : 4) &&
     item.options.every((option) => typeof option === 'string' && option.trim()) &&
-    Number.isInteger(item.answer) && item.answer >= 1 && item.answer <= 4
+    Number.isInteger(item.answer) && item.answer >= 1 && item.answer <= (mode === 'true-false' ? 2 : 4) &&
+    (mode === 'true-false' || (CATEGORIES[item.category] && (!category || item.category === category)))
   ));
   if (!filtered.length) throw new Error(`Aucune question disponible pour ${category || 'cette catégorie'}.`);
   return filtered;
@@ -197,7 +204,7 @@ function formatQuestion(game) {
   const options = game.question.options
     .map((option, index) => `   *${index + 1}.* ${option}`)
     .join('\n');
-  return `🧠 *QUIZ ${CATEGORIES[game.category].toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds seulement avec *1*, *2*, *3* ou *4*.\n⏱️ Réponses ouvertes pendant 90 secondes.\n✅ La correction est automatique dès qu’un joueur trouve ou que tous les joueurs connus ont répondu.`;
+  return `🧠 *QUIZ ${(game.mode === 'true-false' ? 'VRAI/FAUX' : CATEGORIES[game.category]).toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds avec *${game.mode === 'true-false' ? 'Vrai ou Faux (ou 1/2)' : '1, 2, 3 ou 4'}*.\n⏱️ Réponses ouvertes pendant 90 secondes.\n✅ La correction est automatique dès qu’un joueur trouve ou que tous les joueurs connus ont répondu.`;
 }
 
 function playerLabel(player) {
@@ -206,7 +213,7 @@ function playerLabel(player) {
 
 async function sendQuestion(chatId, sock, game) {
   const text = formatQuestion(game);
-  if (!game.imageMode) return sock.sendMessage(chatId, { text });
+  if (!game.imageMode || game.mode === 'true-false') return sock.sendMessage(chatId, { text });
   try {
     const image = await findQuestionImage(game.question, game.category);
     if (!image) throw new Error('Aucune image trouvée');
@@ -251,10 +258,11 @@ function chooseQuestion(game) {
   return question;
 }
 
-function createGame(chatId, player, category, total, imageMode, sock) {
-  const pool = loadQuestions(category);
+function createGame(chatId, player, category, total, imageMode, sock, mode = 'classic') {
+  const pool = loadQuestions(category, mode);
   const game = {
     category,
+    mode,
     total,
     imageMode,
     index: 1,
@@ -284,7 +292,8 @@ function hasImageOption(args) {
 function parseCategory(args) {
   const candidate = args.find((arg) => (
     !QUESTION_LIMITS.includes(Number(normalize(arg))) &&
-    !['image', 'images', 'img', 'photo', 'photos'].includes(normalize(arg))
+    !['image', 'images', 'img', 'photo', 'photos'].includes(normalize(arg)) &&
+    !isTrueFalseCategory(arg)
   ));
   return categoryFrom(candidate || '');
 }
@@ -343,8 +352,11 @@ async function answerQuiz(chatId, sock, player, answer) {
   const game = activeQuizzes.get(chatId);
   if (!game || game.resolving) return false;
 
-  const selectedAnswer = Number(answer);
-  if (!Number.isInteger(selectedAnswer) || selectedAnswer < 1 || selectedAnswer > 4) return false;
+  const normalizedAnswer = normalize(answer);
+  const selectedAnswer = game.mode === 'true-false'
+    ? (['vrai', 'true', '1'].includes(normalizedAnswer) ? 1 : ['faux', 'false', '2'].includes(normalizedAnswer) ? 2 : null)
+    : Number(answer);
+  if (!selectedAnswer || !Number.isInteger(selectedAnswer) || selectedAnswer < 1 || selectedAnswer > (game.mode === 'true-false' ? 2 : 4)) return false;
   if (game.answers.has(player)) return true;
 
   game.participants.add(player);
@@ -380,13 +392,14 @@ async function runQuizCommand(jid, sock, context = {}) {
   const firstArg = normalize(args[0]);
   const player = getSender(context);
 
-  if (/^[1-4]$/.test(firstArg) && activeQuizzes.has(chatId)) {
+  const currentGame = activeQuizzes.get(chatId);
+  if (currentGame && (currentGame.mode === 'true-false' ? ['vrai', 'faux', 'true', 'false', '1', '2'].includes(firstArg) : /^[1-4]$/.test(firstArg))) {
     return answerQuiz(chatId, sock, player, firstArg);
   }
 
   if (!firstArg || ['aide', 'help', 'categories', 'catégories'].includes(firstArg)) {
     return sock.sendMessage(chatId, {
-      text: `🧠 *QUIZ — CATÉGORIES DISPONIBLES*\n\n${formatCategories()}\n\nFormats acceptés : *10*, *30*, *60* ou *100* questions.\nExemple texte : *.quiz anime 30*\nExemple avec images : *.quiz anime image 30*\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. La correction et la question suivante sont automatiques.\n\n*.quiz score* — voir les scores\n*.quiz stop* — arrêter la partie`
+      text: `🧠 *QUIZ — CATÉGORIES DISPONIBLES*\n\n${formatCategories()}\n\n🎲 *Mode Vrai/Faux* : *.quiz vrai-faux 10*\nRéponds par *Vrai*, *Faux*, *1* ou *2*.\n\nFormats acceptés : *10*, *30*, *60* ou *100* questions.\nExemple texte : *.quiz anime 30*\nExemple avec images : *.quiz anime image 30*\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. La correction et la question suivante sont automatiques.\n\n*.quiz score* — voir les scores\n*.quiz stop* — arrêter la partie`
     });
   }
 
@@ -403,17 +416,18 @@ async function runQuizCommand(jid, sock, context = {}) {
     return sock.sendMessage(chatId, { text: '⚠️ Un quiz est déjà en cours. Réponds avec *1*, *2*, *3* ou *4*, ou utilise *.quiz stop*.' });
   }
 
+  const trueFalseMode = isTrueFalseCategory(firstArg);
   const category = parseCategory(args);
   const total = parseTotal(args);
   const imageMode = hasImageOption(args);
-  if (!CATEGORIES[category]) {
-    return sock.sendMessage(chatId, { text: `❌ Catégorie inconnue.\n\n${formatCategories()}` });
+  if (!trueFalseMode && !CATEGORIES[category]) {
+    return sock.sendMessage(chatId, { text: `❌ Catégorie inconnue.\n\n${formatCategories()}\n\nMode spécial : *.quiz vrai-faux 10*` });
   }
 
   try {
-    const game = createGame(chatId, player, category, total, imageMode, sock);
+    const game = createGame(chatId, player, trueFalseMode ? TRUE_FALSE_CATEGORY : category, total, imageMode, sock, trueFalseMode ? 'true-false' : 'classic');
     await sock.sendMessage(chatId, {
-      text: `🎮 Partie de *${total} questions* lancée dans la catégorie *${CATEGORIES[category]}*${imageMode ? ' avec images' : ''}.`
+      text: `🎮 Partie de *${total} questions* lancée en mode *${trueFalseMode ? 'Vrai/Faux' : CATEGORIES[category]}*${imageMode && !trueFalseMode ? ' avec images' : ''}.`
     });
     return sendQuestion(chatId, sock, game);
   } catch (error) {
@@ -439,7 +453,7 @@ ovlcmd({
 }, async (jid, sock, context = {}) => {
   const chatId = getChatId(context, jid);
   const raw = getRawText(context);
-  const answer = raw.match(/^[1-4]$/)?.[0];
+  const answer = raw.match(/^(1|2|3|4|vrai|faux|true|false)$/i)?.[0];
   if (!answer || !activeQuizzes.has(chatId)) return;
   await answerQuiz(chatId, sock, getSender(context), answer);
 });
