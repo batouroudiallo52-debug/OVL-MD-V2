@@ -15,15 +15,13 @@ const scores = new Map();
 // Historique des questions utilisées par conversation, catégorie et mode.
 // Il empêche les quiz successifs de reprendre une question déjà jouée.
 const quizHistory = new Map();
-const QUESTION_LIMITS = [10, 20, 30, 50, 100];
+const QUESTION_LIMITS = [10, 20, 30];
 const QUESTION_SELECTIONS = new Map([
   ['1', 10],
   ['2', 20],
-  ['3', 30],
-  ['4', 50],
-  ['5', 100]
+  ['3', 30]
 ]);
-const ANSWER_TIMEOUT = 15_000;
+const ANSWER_TIMEOUT = 10_000;
 const IMAGE_SEARCH_TIMEOUT = 8_000;
 const imageSearchCache = new Map();
 
@@ -256,7 +254,7 @@ function formatQuestion(game) {
   const options = game.question.options
     .map((option, index) => `   *${index + 1}.* ${option}`)
     .join('\n');
-  return `🧠 *QUIZ ${(game.mode === 'true-false' ? 'VRAI/FAUX' : CATEGORIES[game.category]).toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds uniquement avec le chiffre correspondant : *${game.mode === 'true-false' ? '1 ou 2' : '1, 2, 3 ou 4'}*.\n⏱️ Temps limite : *15 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
+  return `🧠 *QUIZ ${(game.mode === 'true-false' ? 'VRAI/FAUX' : CATEGORIES[game.category]).toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds uniquement avec le chiffre correspondant : *${game.mode === 'true-false' ? '1 ou 2' : '1, 2, 3 ou 4'}*.\n⏱️ Temps limite : *10 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
 }
 
 function playerLabel(player) {
@@ -470,7 +468,7 @@ async function runQuizCommand(jid, sock, context = {}) {
       const total = QUESTION_SELECTIONS.get(firstArg);
       const game = createGame(chatId, pendingSelection.player, pendingSelection.category, total, pendingSelection.imageMode, sock, pendingSelection.mode);
       await sock.sendMessage(chatId, {
-        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *15 secondes*.`
+        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
       });
       await sendQuestion(chatId, sock, game);
       scheduleRoundTimeout(chatId, sock, game);
@@ -528,7 +526,7 @@ async function runQuizCommand(jid, sock, context = {}) {
     sock
   });
   return sock.sendMessage(chatId, {
-    text: `🎮 *${trueFalseMode ? 'Vrai/Faux' : CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n${selectionText}\n\nLes questions ne sont jamais répétées dans cette partie ni dans tes quiz précédents de cette catégorie.\n\nRéponds uniquement avec le numéro correspondant.`
+    text: `🎮 *${trueFalseMode ? 'Vrai/Faux' : CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n${selectionText}\n\nChaque quiz utilise des questions nouvelles : aucune question ne se répète pendant cette partie ni dans les quiz précédents de cette catégorie.\n\nRéponds uniquement avec le chiffre correspondant : *1*, *2* ou *3*.`
   });
 }
 
@@ -536,7 +534,7 @@ ovlcmd({
   nom_cmd: 'quiz',
   classe: 'Jeux',
   react: '🧠',
-  desc: 'Quiz à choix multiples : sélection 10/20/30/50/100 questions, sans répétition entre les quiz, réponses 1-4 et 15 secondes par question.',
+  desc: 'Quiz à choix multiples : sélection 10/20/30 questions, sans répétition entre les quiz, réponses 1-4 et 10 secondes par question.',
   alias: ['quizz']
 }, runQuizCommand);
 
@@ -560,7 +558,7 @@ ovlcmd({
       const total = QUESTION_SELECTIONS.get(answer);
       const game = createGame(chatId, pending.player, pending.category, total, pending.imageMode, sock, pending.mode);
       await sock.sendMessage(chatId, {
-        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *15 secondes*.`
+        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
       });
       await sendQuestion(chatId, sock, game);
       scheduleRoundTimeout(chatId, sock, game);
