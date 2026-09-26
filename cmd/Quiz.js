@@ -12,8 +12,14 @@ const TRUE_FALSE_ALIASES = ['vrai', 'faux', 'vrai-faux', 'vraifaux', 'truefalse'
 const activeQuizzes = new Map();
 const pendingQuizSelections = new Map();
 const scores = new Map();
-const QUESTION_LIMITS = [10, 20, 30];
-const QUESTION_SELECTIONS = new Map([['1', 10], ['2', 20], ['3', 30]]);
+const QUESTION_LIMITS = [10, 20, 30, 50, 100];
+const QUESTION_SELECTIONS = new Map([
+  ['1', 10],
+  ['2', 20],
+  ['3', 30],
+  ['4', 50],
+  ['5', 100]
+]);
 const ANSWER_TIMEOUT = 10_000;
 const IMAGE_SEARCH_TIMEOUT = 8_000;
 const imageSearchCache = new Map();
@@ -38,6 +44,7 @@ const CATEGORY_IMAGES = {
 
 // Catégories disponibles pour les parties de quiz.
 const CATEGORIES = {
+  mix: 'Toutes catégories',
   anime: 'Anime',
   culture: 'Culture générale',
   foot: 'Football',
@@ -145,10 +152,18 @@ function loadQuestions(category, mode = 'classic') {
     Array.isArray(item.options) && item.options.length === (mode === 'true-false' ? 2 : 4) &&
     item.options.every((option) => typeof option === 'string' && option.trim()) &&
     Number.isInteger(item.answer) && item.answer >= 1 && item.answer <= (mode === 'true-false' ? 2 : 4) &&
-    (mode === 'true-false' || (CATEGORIES[item.category] && (!category || item.category === category)))
+    (mode === 'true-false' || (CATEGORIES[item.category] && (!category || category === 'mix' || item.category === category)))
   ));
   if (!filtered.length) throw new Error(`Aucune question disponible pour ${category || 'cette catégorie'}.`);
-  return filtered;
+
+  // Évite les doublons présents dans la banque, indépendamment de la casse
+  // ou des espaces superflus dans le texte de la question.
+  const uniqueQuestions = new Map();
+  for (const item of filtered) {
+    const key = normalize(item.question).replace(/\s+/g, ' ');
+    if (!uniqueQuestions.has(key)) uniqueQuestions.set(key, item);
+  }
+  return [...uniqueQuestions.values()];
 }
 
 function getArgs(context) {
@@ -181,6 +196,7 @@ function getRawText(context) {
 
 function categoryFrom(value) {
   const category = normalize(value);
+  if (['mix', 'mixed', 'toutes', 'toutes categories', 'aleatoire', 'aléatoire'].includes(category)) return 'mix';
   if (category === 'culture generale' || category === 'general' || category === 'culture') return 'culture';
   if (category === 'films horreur' || category === 'films dhorreur' || category === 'horreur') return 'horreur';
   if (category === 'football' || category === 'foot') return 'foot';
@@ -199,6 +215,13 @@ function categoryFrom(value) {
 function formatCategories() {
   return Object.entries(CATEGORIES)
     .map(([key, label]) => `• *.quiz ${key} 10* — ${label}`)
+    .join('\n');
+}
+
+function formatQuestionSelections(maxQuestions = Infinity) {
+  return [...QUESTION_SELECTIONS.entries()]
+    .filter(([, total]) => total <= maxQuestions)
+    .map(([key, total]) => `*${key}* — ${total} questions`)
     .join('\n');
 }
 
@@ -252,16 +275,27 @@ function scheduleRoundTimeout(chatId, sock, game) {
   game.timer.unref?.();
 }
 
+function shuffleQuestions(questions) {
+  const shuffled = [...questions];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+  return shuffled;
+}
+
 function chooseQuestion(game) {
-  const pool = game.pool.filter((item) => !game.used.has(item.question));
-  const available = pool.length ? pool : game.pool;
-  const question = available[Math.floor(Math.random() * available.length)];
-  game.used.add(question.question);
+  const question = game.questionQueue[game.index - 1];
+  if (!question) throw new Error('La file de questions uniques est épuisée.');
+  game.used.add(normalize(question.question).replace(/\s+/g, ' '));
   return question;
 }
 
 function createGame(chatId, player, category, total, imageMode, sock, mode = 'classic') {
   const pool = loadQuestions(category, mode);
+  if (total > pool.length) {
+    throw new Error(`Cette partie demande ${total} questions, mais seulement ${pool.length} questions uniques sont disponibles.`);
+  }
   const game = {
     category,
     mode,
@@ -269,6 +303,7 @@ function createGame(chatId, player, category, total, imageMode, sock, mode = 'cl
     imageMode,
     index: 1,
     pool,
+    questionQueue: shuffleQuestions(pool).slice(0, total),
     used: new Set(),
     question: null,
     answers: new Map(),
@@ -436,6 +471,14 @@ async function runQuizCommand(jid, sock, context = {}) {
     return sock.sendMessage(chatId, { text: `❌ Catégorie inconnue.\n\n${formatCategories()}\n\nMode spécial : *.quiz vrai-faux*` });
   }
 
+  const availableQuestions = loadQuestions(trueFalseMode ? TRUE_FALSE_CATEGORY : category, trueFalseMode ? 'true-false' : 'classic').length;
+  const selectionText = formatQuestionSelections(availableQuestions);
+  if (!selectionText) {
+    return sock.sendMessage(chatId, {
+      text: `❌ Cette catégorie ne contient que *${availableQuestions} question(s) unique(s)*. Il en faut au moins 10 pour démarrer un quiz sans répétition.`
+    });
+  }
+
   pendingQuizSelections.set(chatId, {
     category: trueFalseMode ? TRUE_FALSE_CATEGORY : category,
     mode: trueFalseMode ? 'true-false' : 'classic',
@@ -444,7 +487,7 @@ async function runQuizCommand(jid, sock, context = {}) {
     sock
   });
   return sock.sendMessage(chatId, {
-    text: `🎮 *${trueFalseMode ? 'Vrai/Faux' : CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n*1* — 10 questions\n*2* — 20 questions\n*3* — 30 questions\n\nRéponds uniquement avec *1*, *2* ou *3*.`
+    text: `🎮 *${trueFalseMode ? 'Vrai/Faux' : CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n${selectionText}\n\nLes questions ne sont jamais répétées pendant une partie.\n\nRéponds uniquement avec le numéro correspondant.`
   });
 }
 
@@ -452,7 +495,7 @@ ovlcmd({
   nom_cmd: 'quiz',
   classe: 'Jeux',
   react: '🧠',
-  desc: 'Quiz à choix multiples : sélection 10/20/30 questions, réponses 1-4 et 10 secondes par question.',
+  desc: 'Quiz à choix multiples : sélection 10/20/30/50/100 questions, sans répétition, réponses 1-4 et 10 secondes par question.',
   alias: ['quizz']
 }, runQuizCommand);
 
@@ -466,7 +509,7 @@ ovlcmd({
 }, async (jid, sock, context = {}) => {
   const chatId = getChatId(context, jid);
   const raw = getRawText(context);
-  const answer = raw.match(/^(1|2|3|4|vrai|faux|true|false)$/i)?.[0];
+  const answer = raw.match(/^(1|2|3|4|5|vrai|faux|true|false)$/i)?.[0];
   if (!answer) return;
 
   const pending = pendingQuizSelections.get(chatId);
