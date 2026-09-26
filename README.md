@@ -240,6 +240,16 @@ NOM_BOT=🤖 OVL-MD BOT V2
 
 ### 🌍 Rejoins la Communauté OVL
 
+### 🧠 Fonctionnement du quiz
+
+La commande `.quiz <catégorie>` lance une sélection guidée :
+
+- `1` : partie de 10 questions ;
+- `2` : partie de 20 questions ;
+- `3` : partie de 30 questions.
+
+Chaque question propose quatre réponses numérotées de `1` à `4`. Les joueurs doivent envoyer uniquement le chiffre correspondant dans les **10 secondes**. Une seule bonne réponse est retenue par question et rapporte **1 point**. Les questions déjà utilisées sont mémorisées par conversation et catégorie afin de proposer de nouvelles questions à chaque partie, jusqu’à épuisement de la banque disponible.
+
 [![WhatsApp Support](https://img.shields.io/badge/Support%20WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/BP1oOMh0QvR7H3vvO9bRYK)
 [![Telegram Channel](https://img.shields.io/badge/Canal%20Telegram-229ED9?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/ovlmd_tlg)
 [![WhatsApp Channel](https://img.shields.io/badge/Channel%20WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029VayTmvxHltYGCm0J7P0A)
