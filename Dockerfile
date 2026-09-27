@@ -14,7 +14,6 @@ COPY . .
 # Vérifier que l’image contient bien la version complète du quiz.
 RUN test -f cmd/Quiz.js \
     && test -f lib/quiz_questions.json \
-    && test -f lib/quiz_true_false.json \
     && grep -q "QUESTION_LIMITS = \[10, 20, 30\]" cmd/Quiz.js \
     && grep -q "QUESTION_SELECTIONS" cmd/Quiz.js \
     && grep -q "ANSWER_TIMEOUT = 10_000" cmd/Quiz.js \
@@ -23,9 +22,7 @@ RUN test -f cmd/Quiz.js \
     && grep -q "questionQueue" cmd/Quiz.js \
     && grep -q "function questionKey" cmd/Quiz.js \
     && node --check cmd/Quiz.js \
-    && node -e "JSON.parse(require('fs').readFileSync('lib/quiz_questions.json', 'utf8')); JSON.parse(require('fs').readFileSync('lib/quiz_true_false.json', 'utf8'));" \
-    && grep -q "sciences" cmd/Quiz.js \
-    && grep -q '"category": "histoire"' lib/quiz_questions.json
+    && node -e "const q=JSON.parse(require('fs').readFileSync('lib/quiz_questions.json', 'utf8')); const allowed=new Set(['anime','culture','foot','horreur','kpop']); if (!q.length || q.some(x => !allowed.has(x.category)) || new Set(q.map(x => x.category)).size !== allowed.size) process.exit(1);"
 
 EXPOSE 8000
 

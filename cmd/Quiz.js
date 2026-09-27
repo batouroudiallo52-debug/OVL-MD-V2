@@ -6,9 +6,6 @@ const axios = require('axios');
 const { ovlcmd } = require('../lib/ovlcmd');
 
 const QUESTIONS_FILE = path.join(__dirname, '..', 'lib', 'quiz_questions.json');
-const TRUE_FALSE_FILE = path.join(__dirname, '..', 'lib', 'quiz_true_false.json');
-const TRUE_FALSE_CATEGORY = 'vrai-faux';
-const TRUE_FALSE_ALIASES = ['vrai', 'faux', 'vrai-faux', 'vraifaux', 'truefalse', 'tf'];
 const activeQuizzes = new Map();
 const pendingQuizSelections = new Map();
 const scores = new Map();
@@ -32,15 +29,7 @@ const CATEGORY_IMAGES = {
   culture: 'https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=80',
   foot: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
   horreur: 'https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&w=1200&q=80',
-  kpop: 'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=1200&q=80',
-  musique: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1200&q=80',
-  films: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1200&q=80',
-  geographie: 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1200&q=80',
-  histoire: 'https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=1200&q=80',
-  litterature: 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1200&q=80',
-  nature: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80',
-  sciences: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80',
-  technologie: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80'
+  kpop: 'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=1200&q=80'
 };
 
 // Catégories disponibles pour les parties de quiz.
@@ -50,15 +39,7 @@ const CATEGORIES = {
   culture: 'Culture générale',
   foot: 'Football',
   horreur: 'Films d’horreur',
-  kpop: 'K-pop',
-  musique: 'Musique',
-  films: 'Films',
-  geographie: 'Géographie',
-  histoire: 'Histoire',
-  litterature: 'Littérature',
-  nature: 'Nature',
-  sciences: 'Sciences',
-  technologie: 'Technologie'
+  kpop: 'K-pop'
 };
 
 function normalize(value) {
@@ -76,25 +57,21 @@ function questionKey(value) {
     .replace(/\s+/g, ' ');
 }
 
-function historyKey(chatId, category, mode) {
-  return `${chatId}:${mode}:${category}`;
+function historyKey(chatId, category) {
+  return `${chatId}:${category}`;
 }
 
 function getFreshQuestions(chatId, category, mode) {
-  const questions = loadQuestions(category, mode);
-  const used = quizHistory.get(historyKey(chatId, category, mode)) || new Set();
+  const questions = loadQuestions(category);
+  const used = quizHistory.get(historyKey(chatId, category)) || new Set();
   return questions.filter((question) => !used.has(questionKey(question.question)));
 }
 
 function reserveQuestions(chatId, category, mode, questions) {
-  const key = historyKey(chatId, category, mode);
+  const key = historyKey(chatId, category);
   const used = quizHistory.get(key) || new Set();
   for (const question of questions) used.add(questionKey(question.question));
   quizHistory.set(key, used);
-}
-
-function isTrueFalseCategory(value) {
-  return TRUE_FALSE_ALIASES.includes(normalize(value));
 }
 
 function isImageUrl(value) {
@@ -168,16 +145,15 @@ async function findQuestionImage(question, category) {
   return foundImage || CATEGORY_IMAGES[category] || null;
 }
 
-function loadQuestions(category, mode = 'classic') {
-  const file = mode === 'true-false' ? TRUE_FALSE_FILE : QUESTIONS_FILE;
-  const questions = JSON.parse(fs.readFileSync(file, 'utf8'));
+function loadQuestions(category) {
+  const questions = JSON.parse(fs.readFileSync(QUESTIONS_FILE, 'utf8'));
   if (!Array.isArray(questions)) throw new Error('La banque de questions est invalide.');
   const filtered = questions.filter((item) => (
     item && typeof item.question === 'string' && item.question.trim() &&
-    Array.isArray(item.options) && item.options.length === (mode === 'true-false' ? 2 : 4) &&
+    Array.isArray(item.options) && item.options.length === 4 &&
     item.options.every((option) => typeof option === 'string' && option.trim()) &&
-    Number.isInteger(item.answer) && item.answer >= 1 && item.answer <= (mode === 'true-false' ? 2 : 4) &&
-    (mode === 'true-false' || (CATEGORIES[item.category] && (!category || category === 'mix' || item.category === category)))
+    Number.isInteger(item.answer) && item.answer >= 1 && item.answer <= 4 &&
+    CATEGORIES[item.category] && (!category || category === 'mix' || item.category === category)
   ));
   if (!filtered.length) throw new Error(`Aucune question disponible pour ${category || 'cette catégorie'}.`);
 
@@ -225,15 +201,7 @@ function categoryFrom(value) {
   if (category === 'culture generale' || category === 'general' || category === 'culture') return 'culture';
   if (category === 'films horreur' || category === 'films dhorreur' || category === 'horreur') return 'horreur';
   if (category === 'football' || category === 'foot') return 'foot';
-  if (category === 'film' || category === 'films') return 'films';
-  if (category === 'géographie' || category === 'geographie' || category === 'geography') return 'geographie';
-  if (category === 'histoire' || category === 'history') return 'histoire';
-  if (category === 'littérature' || category === 'litterature' || category === 'literature') return 'litterature';
-  if (category === 'nature') return 'nature';
-  if (category === 'sciences' || category === 'science') return 'sciences';
-  if (category === 'technologie' || category === 'technology' || category === 'tech') return 'technologie';
   if (category === 'k-pop' || category === 'kpop') return 'kpop';
-  if (category === 'musique' || category === 'music') return 'musique';
   return category;
 }
 
@@ -254,7 +222,7 @@ function formatQuestion(game) {
   const options = game.question.options
     .map((option, index) => `   *${index + 1}.* ${option}`)
     .join('\n');
-  return `🧠 *QUIZ ${(game.mode === 'true-false' ? 'VRAI/FAUX' : CATEGORIES[game.category]).toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds uniquement avec le chiffre correspondant : *${game.mode === 'true-false' ? '1 ou 2' : '1, 2, 3 ou 4'}*.\n⏱️ Temps limite : *10 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
+  return `🧠 *QUIZ ${CATEGORIES[game.category].toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds uniquement avec le chiffre correspondant : *1, 2, 3 ou 4*.\n⏱️ Temps limite : *10 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
 }
 
 function playerLabel(player) {
@@ -263,7 +231,7 @@ function playerLabel(player) {
 
 async function sendQuestion(chatId, sock, game) {
   const text = formatQuestion(game);
-  if (!game.imageMode || game.mode === 'true-false') return sock.sendMessage(chatId, { text });
+  if (!game.imageMode) return sock.sendMessage(chatId, { text });
   try {
     const image = await findQuestionImage(game.question, game.category);
     if (!image) throw new Error('Aucune image trouvée');
@@ -421,11 +389,8 @@ async function answerQuiz(chatId, sock, player, answer) {
   const game = activeQuizzes.get(chatId);
   if (!game || game.resolving) return false;
 
-  const normalizedAnswer = normalize(answer);
-  const selectedAnswer = game.mode === 'true-false'
-    ? (['vrai', 'true', '1'].includes(normalizedAnswer) ? 1 : ['faux', 'false', '2'].includes(normalizedAnswer) ? 2 : null)
-    : (/^[1-4]$/.test(String(answer).trim()) ? Number(answer) : null);
-  if (!selectedAnswer || !Number.isInteger(selectedAnswer) || selectedAnswer < 1 || selectedAnswer > (game.mode === 'true-false' ? 2 : 4)) return false;
+  const selectedAnswer = /^[1-4]$/.test(String(answer).trim()) ? Number(answer) : null;
+  if (!selectedAnswer || !Number.isInteger(selectedAnswer) || selectedAnswer < 1 || selectedAnswer > 4) return false;
   if (game.answers.has(player)) return true;
 
   game.participants.add(player);
@@ -457,7 +422,7 @@ async function runQuizCommand(jid, sock, context = {}) {
   const player = getSender(context);
 
   const currentGame = activeQuizzes.get(chatId);
-  if (currentGame && (currentGame.mode === 'true-false' ? ['vrai', 'faux', 'true', 'false', '1', '2'].includes(firstArg) : /^[1-4]$/.test(firstArg))) {
+  if (currentGame && /^[1-4]$/.test(firstArg)) {
     return answerQuiz(chatId, sock, player, firstArg);
   }
 
@@ -466,7 +431,7 @@ async function runQuizCommand(jid, sock, context = {}) {
     pendingQuizSelections.delete(chatId);
     try {
       const total = QUESTION_SELECTIONS.get(firstArg);
-      const game = createGame(chatId, pendingSelection.player, pendingSelection.category, total, pendingSelection.imageMode, sock, pendingSelection.mode);
+      const game = createGame(chatId, pendingSelection.player, pendingSelection.category, total, pendingSelection.imageMode, sock);
       await sock.sendMessage(chatId, {
         text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
       });
@@ -499,18 +464,13 @@ async function runQuizCommand(jid, sock, context = {}) {
     return sock.sendMessage(chatId, { text: '⚠️ Un quiz est déjà en cours. Réponds avec *1*, *2*, *3* ou *4*, ou utilise *.quiz stop*.' });
   }
 
-  const trueFalseMode = isTrueFalseCategory(firstArg);
   const category = parseCategory(args);
   const imageMode = hasImageOption(args);
-  if (!trueFalseMode && !CATEGORIES[category]) {
-    return sock.sendMessage(chatId, { text: `❌ Catégorie inconnue.\n\n${formatCategories()}\n\nMode spécial : *.quiz vrai-faux*` });
+  if (!CATEGORIES[category]) {
+    return sock.sendMessage(chatId, { text: `❌ Catégorie inconnue.\n\n${formatCategories()}` });
   }
 
-  const availableQuestions = getFreshQuestions(
-    chatId,
-    trueFalseMode ? TRUE_FALSE_CATEGORY : category,
-    trueFalseMode ? 'true-false' : 'classic'
-  ).length;
+  const availableQuestions = getFreshQuestions(chatId, category).length;
   const selectionText = formatQuestionSelections(availableQuestions);
   if (!selectionText) {
     return sock.sendMessage(chatId, {
@@ -519,14 +479,13 @@ async function runQuizCommand(jid, sock, context = {}) {
   }
 
   pendingQuizSelections.set(chatId, {
-    category: trueFalseMode ? TRUE_FALSE_CATEGORY : category,
-    mode: trueFalseMode ? 'true-false' : 'classic',
+    category,
     imageMode,
     player,
     sock
   });
   return sock.sendMessage(chatId, {
-    text: `🎮 *${trueFalseMode ? 'Vrai/Faux' : CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n${selectionText}\n\nChaque quiz utilise des questions nouvelles : aucune question ne se répète pendant cette partie ni dans les quiz précédents de cette catégorie.\n\nRéponds uniquement avec le chiffre correspondant : *1*, *2* ou *3*.`
+    text: `🎮 *${CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n${selectionText}\n\nChaque quiz utilise des questions nouvelles : aucune question ne se répète pendant cette partie ni dans les quiz précédents de cette catégorie.\n\nRéponds uniquement avec le chiffre correspondant : *1*, *2* ou *3*.`
   });
 }
 
@@ -534,7 +493,7 @@ ovlcmd({
   nom_cmd: 'quiz',
   classe: 'Jeux',
   react: '🧠',
-  desc: 'Quiz à choix multiples : sélection 10/20/30 questions, sans répétition entre les quiz, réponses 1-4 et 10 secondes par question.',
+  desc: 'Quiz Anime, Culture générale, Football, Films d’horreur ou K-pop : sélection 10/20/30 questions, sans répétition et 10 secondes par question.',
   alias: ['quizz']
 }, runQuizCommand);
 
@@ -548,7 +507,7 @@ ovlcmd({
 }, async (jid, sock, context = {}) => {
   const chatId = getChatId(context, jid);
   const raw = getRawText(context);
-  const answer = raw.match(/^(1|2|3|4|5|vrai|faux|true|false)$/i)?.[0];
+  const answer = raw.match(/^(1|2|3|4)$/)?.[0];
   if (!answer) return;
 
   const pending = pendingQuizSelections.get(chatId);
@@ -556,7 +515,7 @@ ovlcmd({
     pendingQuizSelections.delete(chatId);
     try {
       const total = QUESTION_SELECTIONS.get(answer);
-      const game = createGame(chatId, pending.player, pending.category, total, pending.imageMode, sock, pending.mode);
+      const game = createGame(chatId, pending.player, pending.category, total, pending.imageMode, sock);
       await sock.sendMessage(chatId, {
         text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
       });
