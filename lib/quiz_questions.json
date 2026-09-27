@@ -878,5 +878,775 @@
       "TREASURE"
     ],
     "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Naruto, quel est le nom du démon scellé dans Naruto ?",
+    "options": [
+      "Kurama",
+      "Shukaku",
+      "Gyuki",
+      "Son Goku"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Demon Slayer, quelle respiration utilise Tanjiro au début de son aventure ?",
+    "options": [
+      "Respiration de l’eau",
+      "Respiration de la brume",
+      "Respiration du tonnerre",
+      "Respiration de la flamme"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Death Note, quel est le nom du shinigami lié au carnet de Light ?",
+    "options": [
+      "Rem",
+      "Ryuk",
+      "Sidoh",
+      "Gelus"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "anime",
+    "question": "Dans L’Attaque des Titans, comment s’appelle le bataillon chargé des expéditions hors des murs ?",
+    "options": [
+      "Brigade spéciale",
+      "Garnison",
+      "Bataillon d’exploration",
+      "Police militaire"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "anime",
+    "question": "Dans My Hero Academia, quel est le nom du pouvoir de Deku ?",
+    "options": [
+      "One For All",
+      "All For One",
+      "Explosion",
+      "Création"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Pokémon, quel est le premier Pokémon de Sacha ?",
+    "options": [
+      "Salamèche",
+      "Carapuce",
+      "Pikachu",
+      "Bulbizarre"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "anime",
+    "question": "Dans Hunter x Hunter, quel est le prénom du meilleur ami de Gon ?",
+    "options": [
+      "Killua",
+      "Kurapika",
+      "Leorio",
+      "Hisoka"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Jujutsu Kaisen, quel objet Sukuna possède-t-il ?",
+    "options": [
+      "Des doigts maudits",
+      "Des cartes magiques",
+      "Des pierres de lune",
+      "Des masques"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Bleach, comment s’appelle l’épée de Ichigo ?",
+    "options": [
+      "Zangetsu",
+      "Senbonzakura",
+      "Ryujin Jakka",
+      "Benihime"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Fairy Tail, quelle magie utilise principalement Natsu ?",
+    "options": [
+      "Magie de feu du chasseur de dragons",
+      "Magie de glace",
+      "Magie céleste",
+      "Magie des ombres"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Fullmetal Alchemist, quel est le prénom du frère d’Edward ?",
+    "options": [
+      "Alphonse",
+      "Roy",
+      "Maes",
+      "Winry"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Sailor Moon, quel est le nom civil de Sailor Moon ?",
+    "options": [
+      "Usagi Tsukino",
+      "Rei Hino",
+      "Ami Mizuno",
+      "Makoto Kino"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "anime",
+    "question": "Dans Haikyuu!!, quel sport pratique principalement Hinata ?",
+    "options": [
+      "Le baseball",
+      "Le volley-ball",
+      "Le basket-ball",
+      "Le tennis"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "anime",
+    "question": "Dans Code Geass, quel pouvoir Lelouch reçoit-il ?",
+    "options": [
+      "Le Geass",
+      "Le Nen",
+      "L’Alchimie",
+      "La Magie des cartes"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "culture",
+    "question": "Quelle est la monnaie officielle du Japon ?",
+    "options": [
+      "Le won",
+      "Le yen",
+      "Le yuan",
+      "Le baht"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "culture",
+    "question": "Quel est le plus grand mammifère vivant ?",
+    "options": [
+      "L’éléphant d’Afrique",
+      "La baleine bleue",
+      "La girafe",
+      "Le cachalot"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "culture",
+    "question": "Quelle langue est principalement parlée au Brésil ?",
+    "options": [
+      "L’espagnol",
+      "Le portugais",
+      "Le français",
+      "L’italien"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "culture",
+    "question": "Quel métal est représenté par le symbole Fe ?",
+    "options": [
+      "Le fer",
+      "Le fluor",
+      "Le francium",
+      "Le feldspath"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "culture",
+    "question": "Combien de minutes y a-t-il dans deux heures ?",
+    "options": [
+      "60",
+      "90",
+      "120",
+      "180"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "culture",
+    "question": "Quel est le plus long fleuve d’Amérique du Sud ?",
+    "options": [
+      "Le Nil",
+      "L’Amazone",
+      "Le Mississippi",
+      "Le Paraná"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "culture",
+    "question": "Combien de lettres compte l’alphabet français ?",
+    "options": [
+      "24",
+      "25",
+      "26",
+      "27"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "culture",
+    "question": "Quel organe pompe le sang dans le corps humain ?",
+    "options": [
+      "Le foie",
+      "Le poumon",
+      "Le cœur",
+      "Le rein"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "culture",
+    "question": "Quel est le satellite naturel de la Terre ?",
+    "options": [
+      "Mars",
+      "La Lune",
+      "Vénus",
+      "Titan"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "culture",
+    "question": "Dans quel pays se trouve la ville de Marrakech ?",
+    "options": [
+      "Le Maroc",
+      "L’Algérie",
+      "La Tunisie",
+      "L’Égypte"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "culture",
+    "question": "Quel instrument mesure la température ?",
+    "options": [
+      "Le baromètre",
+      "Le thermomètre",
+      "L’altimètre",
+      "Le sismographe"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "culture",
+    "question": "Quel est le résultat de 9 × 8 ?",
+    "options": [
+      "64",
+      "72",
+      "81",
+      "96"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "culture",
+    "question": "Quelle planète est connue comme la planète rouge ?",
+    "options": [
+      "Mars",
+      "Jupiter",
+      "Mercure",
+      "Neptune"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "culture",
+    "question": "Quel gaz les plantes absorbent-elles principalement pour la photosynthèse ?",
+    "options": [
+      "Oxygène",
+      "Azote",
+      "Dioxyde de carbone",
+      "Hélium"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "foot",
+    "question": "Combien de mi-temps compte un match de football ?",
+    "options": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "foot",
+    "question": "Quelle partie du corps est interdite aux joueurs de champ ?",
+    "options": [
+      "Le pied",
+      "La tête",
+      "La main",
+      "La poitrine"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "foot",
+    "question": "Combien de minutes dure normalement un match sans prolongation ?",
+    "options": [
+      "60",
+      "80",
+      "90",
+      "120"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "foot",
+    "question": "Quel club est surnommé les Merengues ?",
+    "options": [
+      "FC Barcelone",
+      "Real Madrid",
+      "Chelsea",
+      "Juventus"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "foot",
+    "question": "Que signifie le terme hat-trick ?",
+    "options": [
+      "Trois passes décisives",
+      "Trois buts par un joueur",
+      "Trois cartons jaunes",
+      "Trois remplacements"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "foot",
+    "question": "Quelle compétition oppose les sélections européennes ?",
+    "options": [
+      "La Copa América",
+      "La CAN",
+      "L’Euro",
+      "La Gold Cup"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "foot",
+    "question": "Dans quel pays se trouve le club Liverpool FC ?",
+    "options": [
+      "Angleterre",
+      "France",
+      "Italie",
+      "Portugal"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "foot",
+    "question": "Combien de points rapporte une victoire en championnat dans la plupart des compétitions ?",
+    "options": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "answer": 3
+  },
+  {
+    "category": "foot",
+    "question": "Quel club français joue au Parc des Princes ?",
+    "options": [
+      "Olympique Lyonnais",
+      "Paris Saint-Germain",
+      "AS Monaco",
+      "Lille OSC"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "foot",
+    "question": "Quel joueur français a remporté le Ballon d’Or 2022 ?",
+    "options": [
+      "Kylian Mbappé",
+      "Karim Benzema",
+      "Antoine Griezmann",
+      "Zinedine Zidane"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "foot",
+    "question": "Quelle équipe nationale porte le surnom les Bleus ?",
+    "options": [
+      "La France",
+      "La Belgique",
+      "La Suisse",
+      "Le Canada"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "foot",
+    "question": "Comment appelle-t-on le coup de pied accordé après une faute dans la surface ?",
+    "options": [
+      "Un corner",
+      "Un penalty",
+      "Un coup d’envoi",
+      "Une touche"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "foot",
+    "question": "Quel pays a remporté la Coupe du monde 2018 ?",
+    "options": [
+      "La Croatie",
+      "La France",
+      "Le Portugal",
+      "La Belgique"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "foot",
+    "question": "Quel terme désigne une passe qui permet de marquer un but ?",
+    "options": [
+      "Une passe décisive",
+      "Un dégagement",
+      "Un tacle",
+      "Un pressing"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Quel personnage porte le masque de hockey dans Vendredi 13 ?",
+    "options": [
+      "Michael Myers",
+      "Jason Voorhees",
+      "Ghostface",
+      "Leatherface"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "horreur",
+    "question": "Dans Psychose, quel est le prénom du propriétaire du motel ?",
+    "options": [
+      "Norman",
+      "Jack",
+      "Sam",
+      "John"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Quel personnage est lié à la poupée Chucky ?",
+    "options": [
+      "Un tueur transféré dans une poupée",
+      "Un fantôme d’enfant",
+      "Un clown",
+      "Un extraterrestre"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Dans The Shining, comment s’appelle l’hôtel ?",
+    "options": [
+      "Bates Motel",
+      "Overlook",
+      "Blackwood",
+      "Raven House"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "horreur",
+    "question": "Quel film met en scène un extraterrestre qui chasse un équipage spatial ?",
+    "options": [
+      "Alien",
+      "Scream",
+      "Saw",
+      "Sinister"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Quel objet est utilisé par Candyman pour apparaître selon la légende ?",
+    "options": [
+      "Un miroir",
+      "Une télévision",
+      "Une cloche",
+      "Une porte"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Dans Conjuring, quel métier exercent Ed et Lorraine Warren ?",
+    "options": [
+      "Journalistes",
+      "Démonologues",
+      "Médecins",
+      "Policiers"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "horreur",
+    "question": "Quel monstre est au centre du film The Babadook ?",
+    "options": [
+      "Une créature issue d’un livre",
+      "Un vampire",
+      "Un loup-garou",
+      "Un zombie"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Dans Insidious, quel monde mystérieux les personnages explorent-ils ?",
+    "options": [
+      "Le Royaume des ombres",
+      "Le Further",
+      "La Zone rouge",
+      "Le Monde miroir"
+    ],
+    "answer": 2
+  },
+  {
+    "category": "horreur",
+    "question": "Quel film d’horreur suit une famille dans une maison isolée avec une cassette ?",
+    "options": [
+      "Sinister",
+      "Saw",
+      "Hostel",
+      "REC"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Quel personnage de Ça se nourrit principalement de la peur des enfants ?",
+    "options": [
+      "Pennywise",
+      "Jigsaw",
+      "Pinhead",
+      "Dracula"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Dans Resident Evil, quelle entreprise est liée à la catastrophe ?",
+    "options": [
+      "Umbrella Corporation",
+      "Wayne Enterprises",
+      "Weyland-Yutani",
+      "Cyberdyne"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Quel film met en scène des zombies dans un centre commercial ?",
+    "options": [
+      "Dawn of the Dead",
+      "The Ring",
+      "The Others",
+      "Midsommar"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "horreur",
+    "question": "Dans Scream, quel personnage appelle généralement ses victimes au téléphone ?",
+    "options": [
+      "Ghostface",
+      "Pinhead",
+      "Pennywise",
+      "Samara"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe féminin a débuté avec la chanson Into the New World ?",
+    "options": [
+      "Girls’ Generation",
+      "BLACKPINK",
+      "TWICE",
+      "IVE"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel membre de BTS est connu sous le nom de scène RM ?",
+    "options": [
+      "Kim Namjoon",
+      "Kim Taehyung",
+      "Min Yoongi",
+      "Jung Hoseok"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe a sorti la chanson Love Scenario ?",
+    "options": [
+      "iKON",
+      "EXO",
+      "NCT",
+      "SEVENTEEN"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe féminin est associé à la chanson Wannabe ?",
+    "options": [
+      "ITZY",
+      "aespa",
+      "MAMAMOO",
+      "Red Velvet"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe compte les membres Seungmin et Hyunjin ?",
+    "options": [
+      "Stray Kids",
+      "TXT",
+      "ATEEZ",
+      "MONSTA X"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe a sorti la chanson Growl ?",
+    "options": [
+      "EXO",
+      "BTS",
+      "SHINee",
+      "GOT7"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel membre de BLACKPINK est aussi connue sous son prénom Jennie ?",
+    "options": [
+      "Kim Jennie",
+      "Lalisa Manobal",
+      "Park Chaeyoung",
+      "Kim Jisoo"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe a sorti la chanson Super Shy ?",
+    "options": [
+      "NewJeans",
+      "LE SSERAFIM",
+      "Kep1er",
+      "ITZY"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel est le fandom de SEVENTEEN ?",
+    "options": [
+      "CARAT",
+      "MOA",
+      "STAY",
+      "MIDZY"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe est associé à la chanson Deja Vu et au fandom MOA ?",
+    "options": [
+      "TXT",
+      "BTS",
+      "ENHYPEN",
+      "EXO"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe féminin a sorti la chanson Psycho ?",
+    "options": [
+      "Red Velvet",
+      "TWICE",
+      "BLACKPINK",
+      "KARA"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel artiste solo a sorti Gangnam Style ?",
+    "options": [
+      "PSY",
+      "Rain",
+      "G-Dragon",
+      "Taeyang"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe féminin est connu pour la chanson DDU-DU DDU-DU ?",
+    "options": [
+      "BLACKPINK",
+      "TWICE",
+      "Red Velvet",
+      "IVE"
+    ],
+    "answer": 1
+  },
+  {
+    "category": "kpop",
+    "question": "Quel groupe masculin a sorti la chanson Replay en 2008 ?",
+    "options": [
+      "SHINee",
+      "EXO",
+      "BTOB",
+      "2PM"
+    ],
+    "answer": 1
   }
 ]

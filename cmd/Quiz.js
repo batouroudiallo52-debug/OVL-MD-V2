@@ -18,7 +18,7 @@ const QUESTION_SELECTIONS = new Map([
   ['2', 20],
   ['3', 30]
 ]);
-const ANSWER_TIMEOUT = 10_000;
+const ANSWER_TIMEOUT = 15_000;
 const IMAGE_SEARCH_TIMEOUT = 8_000;
 const imageSearchCache = new Map();
 
@@ -222,7 +222,7 @@ function formatQuestion(game) {
   const options = game.question.options
     .map((option, index) => `   *${index + 1}.* ${option}`)
     .join('\n');
-  return `🧠 *QUIZ ${CATEGORIES[game.category].toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds uniquement avec le chiffre correspondant : *1, 2, 3 ou 4*.\n⏱️ Temps limite : *10 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
+  return `🧠 *QUIZ ${CATEGORIES[game.category].toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds uniquement avec le chiffre correspondant : *1, 2, 3 ou 4*.\n⏱️ Temps limite : *15 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
 }
 
 function playerLabel(player) {
@@ -325,8 +325,7 @@ function hasImageOption(args) {
 function parseCategory(args) {
   const candidate = args.find((arg) => (
     !QUESTION_LIMITS.includes(Number(normalize(arg))) &&
-    !['image', 'images', 'img', 'photo', 'photos'].includes(normalize(arg)) &&
-    !isTrueFalseCategory(arg)
+    !['image', 'images', 'img', 'photo', 'photos'].includes(normalize(arg))
   ));
   return categoryFrom(candidate || '');
 }
@@ -433,7 +432,7 @@ async function runQuizCommand(jid, sock, context = {}) {
       const total = QUESTION_SELECTIONS.get(firstArg);
       const game = createGame(chatId, pendingSelection.player, pendingSelection.category, total, pendingSelection.imageMode, sock);
       await sock.sendMessage(chatId, {
-        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
+        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *15 secondes*.`
       });
       await sendQuestion(chatId, sock, game);
       scheduleRoundTimeout(chatId, sock, game);
@@ -493,7 +492,7 @@ ovlcmd({
   nom_cmd: 'quiz',
   classe: 'Jeux',
   react: '🧠',
-  desc: 'Quiz Anime, Culture générale, Football, Films d’horreur ou K-pop : sélection 10/20/30 questions, sans répétition et 10 secondes par question.',
+  desc: 'Quiz Anime, Culture générale, Football, Films d’horreur ou K-pop : sélection 10/20/30 questions, réponses 1-4, sans répétition et 15 secondes par question.',
   alias: ['quizz']
 }, runQuizCommand);
 
@@ -517,7 +516,7 @@ ovlcmd({
       const total = QUESTION_SELECTIONS.get(answer);
       const game = createGame(chatId, pending.player, pending.category, total, pending.imageMode, sock);
       await sock.sendMessage(chatId, {
-        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *10 secondes*.`
+        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *15 secondes*.`
       });
       await sendQuestion(chatId, sock, game);
       scheduleRoundTimeout(chatId, sock, game);
