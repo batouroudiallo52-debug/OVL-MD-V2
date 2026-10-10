@@ -7,7 +7,8 @@
   "scripts": {
     "start": "pm2 start Ovl.js --attach --name ovl",
     "stop": "pm2 stop all",
-    "Ovl": "node Ovl.js"
+    "Ovl": "node Ovl.js",
+    "test": "node --test"
   },
   "keywords": ["Ainz", "OVL-MD-V2", "Whatsapp", "Baileys", "Muti-device"],
   "author": "Ainz-devs",
@@ -36,4 +37,3 @@
     "wikipedia": "^2.1.2"
   }
 }
-

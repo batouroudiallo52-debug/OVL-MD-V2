@@ -244,11 +244,15 @@ NOM_BOT=🤖 OVL-MD BOT V2
 
 La commande `.quiz <catégorie>` lance une sélection guidée :
 
-- `1` : partie de 10 questions ;
-- `2` : partie de 20 questions ;
-- `3` : partie de 30 questions.
+- `1️⃣` : partie de 10 questions ;
+- `2️⃣` : partie de 20 questions ;
+- `3️⃣` : partie de 30 questions.
 
-Chaque question propose quatre réponses numérotées de `1` à `4`. Les joueurs doivent envoyer uniquement le chiffre correspondant dans les **10 secondes**. Une seule bonne réponse est retenue par question et rapporte **1 point**. Les questions déjà utilisées sont mémorisées par conversation et catégorie afin de proposer de nouvelles questions à chaque partie, jusqu’à épuisement de la banque disponible.
+Le bot demande le nombre de questions avec les choix `1️⃣` (10), `2️⃣` (20) ou `3️⃣` (30). Chaque question affiche ses quatre réponses avec les chiffres emoji `1️⃣` à `4️⃣` ; les chiffres simples restent acceptés. Les joueurs ont **15 secondes** pour répondre. Une seule bonne réponse est retenue par question et rapporte **1 point**. Les questions jouées sont mémorisées par conversation, toutes catégories confondues, pour éviter les répétitions tant que le bot reste en marche et qu’il reste des questions inédites.
+
+### 🎮 Jeu du pendu
+
+La commande `.pendu` lance une partie dans la conversation. Les joueurs proposent une lettre à la fois ; la partie se termine après **six erreurs** ou lorsque le mot est trouvé. Utilisez `.pendu stop` pour arrêter la partie. Le jeu est indépendant des catégories et de la banque de quiz.
 
 [![WhatsApp Support](https://img.shields.io/badge/Support%20WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/BP1oOMh0QvR7H3vvO9bRYK)
 [![Telegram Channel](https://img.shields.io/badge/Canal%20Telegram-229ED9?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/ovlmd_tlg)

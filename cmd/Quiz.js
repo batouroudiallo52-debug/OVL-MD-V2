@@ -18,6 +18,7 @@ const QUESTION_SELECTIONS = new Map([
   ['2', 20],
   ['3', 30]
 ]);
+const DIGIT_EMOJIS = ['1️⃣', '2️⃣', '3️⃣', '4️⃣'];
 const ANSWER_TIMEOUT = 15_000;
 const IMAGE_SEARCH_TIMEOUT = 8_000;
 const imageSearchCache = new Map();
@@ -57,18 +58,18 @@ function questionKey(value) {
     .replace(/\s+/g, ' ');
 }
 
-function historyKey(chatId, category) {
-  return `${chatId}:${category}`;
+function historyKey(chatId) {
+  return String(chatId);
 }
 
 function getFreshQuestions(chatId, category, mode) {
   const questions = loadQuestions(category);
-  const used = quizHistory.get(historyKey(chatId, category)) || new Set();
+  const used = quizHistory.get(historyKey(chatId)) || new Set();
   return questions.filter((question) => !used.has(questionKey(question.question)));
 }
 
 function reserveQuestions(chatId, category, mode, questions) {
-  const key = historyKey(chatId, category);
+  const key = historyKey(chatId);
   const used = quizHistory.get(key) || new Set();
   for (const question of questions) used.add(questionKey(question.question));
   quizHistory.set(key, used);
@@ -173,6 +174,11 @@ function getArgs(context) {
   return [];
 }
 
+function parseDigitChoice(value) {
+  const choice = String(value || '').trim().replace(/[\uFE0F\u20E3]/g, '');
+  return /^[1-4]$/.test(choice) ? choice : null;
+}
+
 function getSender(context) {
   return context?.auteur_Message || context?.sender || context?.participant || 'joueur';
 }
@@ -214,15 +220,15 @@ function formatCategories() {
 function formatQuestionSelections(maxQuestions = Infinity) {
   return [...QUESTION_SELECTIONS.entries()]
     .filter(([, total]) => total <= maxQuestions)
-    .map(([key, total]) => `*${key}* — ${total} questions`)
+    .map(([key, total]) => `${DIGIT_EMOJIS[Number(key) - 1]} — ${total} questions`)
     .join('\n');
 }
 
 function formatQuestion(game) {
   const options = game.question.options
-    .map((option, index) => `   *${index + 1}.* ${option}`)
+    .map((option, index) => `   ${DIGIT_EMOJIS[index]} ${option}`)
     .join('\n');
-  return `🧠 *QUIZ ${CATEGORIES[game.category].toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds uniquement avec le chiffre correspondant : *1, 2, 3 ou 4*.\n⏱️ Temps limite : *15 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
+  return `🧠 *QUIZ ${CATEGORIES[game.category].toUpperCase()}*\nQuestion *${game.index}/${game.total}*\n\n${game.question.question}\n\n${options}\n\nRéponds avec le chiffre emoji correspondant (ou le chiffre simple 1, 2, 3 ou 4).\n⏱️ Temps limite : *15 secondes*.\n✅ Une seule bonne réponse est comptabilisée et rapporte *1 point*.`;
 }
 
 function playerLabel(player) {
@@ -418,21 +424,22 @@ async function runQuizCommand(jid, sock, context = {}) {
   const chatId = getChatId(context, jid);
   const args = getArgs(context);
   const firstArg = normalize(args[0]);
+  const firstChoice = parseDigitChoice(args[0]);
   const player = getSender(context);
 
   const currentGame = activeQuizzes.get(chatId);
-  if (currentGame && /^[1-4]$/.test(firstArg)) {
-    return answerQuiz(chatId, sock, player, firstArg);
+  if (currentGame && firstChoice) {
+    return answerQuiz(chatId, sock, player, firstChoice);
   }
 
   const pendingSelection = pendingQuizSelections.get(chatId);
-  if (pendingSelection && QUESTION_SELECTIONS.has(firstArg)) {
+  if (pendingSelection && firstChoice && QUESTION_SELECTIONS.has(firstChoice)) {
     pendingQuizSelections.delete(chatId);
     try {
-      const total = QUESTION_SELECTIONS.get(firstArg);
+      const total = QUESTION_SELECTIONS.get(firstChoice);
       const game = createGame(chatId, pendingSelection.player, pendingSelection.category, total, pendingSelection.imageMode, sock);
       await sock.sendMessage(chatId, {
-        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *15 secondes*.`
+        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds avec *1️⃣*, *2️⃣*, *3️⃣* ou *4️⃣* (les chiffres simples sont aussi acceptés). Chaque question a une limite de *15 secondes*.`
       });
       await sendQuestion(chatId, sock, game);
       scheduleRoundTimeout(chatId, sock, game);
@@ -460,7 +467,7 @@ async function runQuizCommand(jid, sock, context = {}) {
   if (['score', 'scores', 'classement'].includes(firstArg)) return showScore(chatId, sock);
 
   if (activeQuizzes.has(chatId)) {
-    return sock.sendMessage(chatId, { text: '⚠️ Un quiz est déjà en cours. Réponds avec *1*, *2*, *3* ou *4*, ou utilise *.quiz stop*.' });
+    return sock.sendMessage(chatId, { text: '⚠️ Un quiz est déjà en cours. Réponds avec *1️⃣*, *2️⃣*, *3️⃣* ou *4️⃣* (ou les chiffres simples), ou utilise *.quiz stop*.' });
   }
 
   const category = parseCategory(args);
@@ -484,7 +491,7 @@ async function runQuizCommand(jid, sock, context = {}) {
     sock
   });
   return sock.sendMessage(chatId, {
-    text: `🎮 *${CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n${selectionText}\n\nChaque quiz utilise des questions nouvelles : aucune question ne se répète pendant cette partie ni dans les quiz précédents de cette catégorie.\n\nRéponds uniquement avec le chiffre correspondant : *1*, *2* ou *3*.`
+    text: `🎮 *${CATEGORIES[category]}*\n\nCombien de questions veux-tu ?\n\n${selectionText}\n\nChaque quiz utilise des questions inédites dans cette conversation, toutes catégories confondues : aucune question ne se répète tant qu’il reste des questions disponibles.\n\nRéponds avec *1️⃣* pour 10, *2️⃣* pour 20 ou *3️⃣* pour 30 questions (les chiffres simples sont aussi acceptés).`
   });
 }
 
@@ -506,7 +513,7 @@ ovlcmd({
 }, async (jid, sock, context = {}) => {
   const chatId = getChatId(context, jid);
   const raw = getRawText(context);
-  const answer = raw.match(/^(1|2|3|4)$/)?.[0];
+  const answer = parseDigitChoice(raw);
   if (!answer) return;
 
   const pending = pendingQuizSelections.get(chatId);
@@ -516,7 +523,7 @@ ovlcmd({
       const total = QUESTION_SELECTIONS.get(answer);
       const game = createGame(chatId, pending.player, pending.category, total, pending.imageMode, sock);
       await sock.sendMessage(chatId, {
-        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds uniquement avec *1*, *2*, *3* ou *4*. Chaque question a une limite de *15 secondes*.`
+        text: `✅ Sélection validée : *${total} questions*.\n\nRéponds avec *1️⃣*, *2️⃣*, *3️⃣* ou *4️⃣* (les chiffres simples sont aussi acceptés). Chaque question a une limite de *15 secondes*.`
       });
       await sendQuestion(chatId, sock, game);
       scheduleRoundTimeout(chatId, sock, game);
@@ -538,6 +545,10 @@ module.exports = {
   quizHistory,
   loadQuestions,
   CATEGORIES,
+  DIGIT_EMOJIS,
+  parseDigitChoice,
+  formatQuestionSelections,
+  formatQuestion,
   findQuestionImage,
   imageSearchQuery,
   answerQuiz,
